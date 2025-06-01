@@ -27,3 +27,15 @@ vite.config.ts.timestamp-*
 src/lib/paraglide
 
 *storybook.log
+compiled
+
+# Test Reports and Coverage
+/test-results/
+/coverage/
+/playwright-report/
+/html/
+*.xml
+*.html
+vitest-results.json
+coverage-summary.json
+playwright-results.json
