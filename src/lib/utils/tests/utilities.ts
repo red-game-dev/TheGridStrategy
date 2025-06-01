@@ -5,11 +5,9 @@ import { render, type RenderResult } from '@testing-library/svelte';
 import type { ComponentProps, SvelteComponent, ComponentType } from 'svelte';
 import type { GuiPresetCfg } from '@rainlanguage/orderbook';
 
-// Global test utilities
 export const mockWalletAddress = '0x1234567890123456789012345678901234567890';
 export const mockTokenAddress = '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd';
 
-// Helper function to create mock form data
 export const createMockFormData = (overrides = {}) => ({
 	baselineIoRatio: '0.5',
 	ioRatioGrowth: '0.05',
@@ -18,7 +16,6 @@ export const createMockFormData = (overrides = {}) => ({
 	...overrides
 });
 
-// Test data factories
 export const createMockTokenInfo = (overrides = {}) => ({
 	address: '0x1234567890123456789012345678901234567890',
 	name: 'Test Token',
@@ -61,7 +58,6 @@ export const createMockDeployment = (overrides = {}) => ({
 	}
 });
 
-// Helper to create a mock writable store
 export function createMockWritableStore<T>(initialValue: T) {
 	let value = initialValue;
 	const subscribers = new Set<(val: T) => void>();
@@ -84,7 +80,6 @@ export function createMockWritableStore<T>(initialValue: T) {
 		subscribers.forEach((run) => run(value));
 	});
 
-	// Add a 'current' getter for easier access to the store's value in tests
 	Object.defineProperty(subscribe, 'current', {
 		get: () => value,
 		enumerable: true,
@@ -98,7 +93,6 @@ export function createMockWritableStore<T>(initialValue: T) {
 	};
 }
 
-// Mock GUI factory
 export const createMockGui = () => ({
 	getSelectTokens: vi.fn().mockReturnValue({ error: null, value: [] }),
 	getNetworkKey: vi.fn().mockReturnValue({ error: null, value: 'ethereum' }),
@@ -131,7 +125,6 @@ export const createMockGui = () => ({
 	setVaultId: vi.fn().mockResolvedValue(undefined)
 });
 
-// Store mock factories
 export const createMockWalletStore = () => ({
 	isConnected: false,
 	isConnecting: false,
@@ -168,7 +161,6 @@ export const createMockGuiStore = () => ({
 	tokenOutputs: []
 });
 
-// Custom render function that sets up common mocks
 export const renderWithMocks = <T extends SvelteComponent>(
 	component: ComponentType<T>,
 	props?: ComponentProps<T>,
@@ -180,7 +172,6 @@ export const renderWithMocks = <T extends SvelteComponent>(
 	const { mockStores = true, customMocks = {} } = options || {};
 
 	if (mockStores) {
-		// Mock common stores using the new helper
 		vi.doMock('$lib/stores/wallet', () => ({
 			walletStore: createMockWritableStore({
 				isConnected: false,
@@ -196,7 +187,7 @@ export const renderWithMocks = <T extends SvelteComponent>(
 
 		vi.doMock('$lib/stores/strategy', () => ({
 			strategyStore: createMockWritableStore(createMockStrategyStore()),
-			gridLevels: createMockWritableStore([]) // gridLevels is typically a derived store, mock as writable
+			gridLevels: createMockWritableStore([])
 		}));
 
 		vi.doMock('$lib/stores/gui', () => ({
@@ -216,7 +207,6 @@ export const renderWithMocks = <T extends SvelteComponent>(
 		}));
 
 		vi.doMock('$lib/stores/validation', () => ({
-			// Validation store also needs its methods mocked
 			validationStore: {
 				...createMockWritableStore({
 					isValid: false,
@@ -224,7 +214,6 @@ export const renderWithMocks = <T extends SvelteComponent>(
 					isValidating: false
 				}),
 				setValidation: vi.fn(function (this: any, isValid, errors = {}) {
-					// Use 'this' for proper context if using internal state
 					this.set({ isValid, errors, isValidating: false });
 				}),
 				clearFieldErrors: vi.fn(function (this: any, field) {
@@ -250,7 +239,6 @@ export const renderWithMocks = <T extends SvelteComponent>(
 		}));
 	}
 
-	// Apply custom mocks
 	Object.entries(customMocks).forEach(([module, mock]) => {
 		vi.doMock(module, () => mock);
 	});
@@ -258,7 +246,6 @@ export const renderWithMocks = <T extends SvelteComponent>(
 	return render(component as any, props);
 };
 
-// Helper to wait for async operations in components
 export const waitFor = (predicate: () => boolean, timeout = 1000): Promise<void> => {
 	return new Promise((resolve, reject) => {
 		const startTime = Date.now();
@@ -277,14 +264,12 @@ export const waitFor = (predicate: () => boolean, timeout = 1000): Promise<void>
 	});
 };
 
-// Helper to create DOM events
 export const createEvent = (type: string, properties: Record<string, any> = {}) => {
 	const event = new Event(type, { bubbles: true, cancelable: true });
 	Object.assign(event, properties);
 	return event;
 };
 
-// Mock implementation helpers
 export const mockAsyncOperation = <T>(result: T, delay = 0, shouldReject = false): Promise<T> => {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
@@ -297,7 +282,6 @@ export const mockAsyncOperation = <T>(result: T, delay = 0, shouldReject = false
 	});
 };
 
-// Cleanup helper
 export const cleanupMocks = () => {
 	vi.clearAllMocks();
 	vi.resetAllMocks();
