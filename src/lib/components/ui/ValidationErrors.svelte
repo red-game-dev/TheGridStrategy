@@ -12,7 +12,6 @@
     .filter(([key]) => !fieldName || key !== fieldName)
     .flatMap(([, errors]) => getFieldErrors(errors)) : [];
   
-  // Helper function to safely extract error messages
   function getFieldErrors(errors: any): string[] {
     if (!errors) return [];
     
@@ -34,7 +33,6 @@
       return [errors.message];
     }
     
-    // Fallback for unknown error formats
     debugLog.warn('Unknown error format:', errors);
     return ['Invalid input'];
   }

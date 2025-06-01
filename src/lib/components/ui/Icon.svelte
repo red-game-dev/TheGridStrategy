@@ -12,31 +12,26 @@
     export let className: string = '';
     export let animate: boolean = false;
     
-    // Predefined size classes for consistency
     const sizeClasses = {
       xs: 'w-3 h-3',
       sm: 'w-4 h-4',
       md: 'w-5 h-5', 
       lg: 'w-6 h-6',
       xl: 'w-12 h-12',
-      custom: '' // Allow full custom sizing via class prop
+      custom: ''
     };
     
-    // Animation classes for specific icons
     const animationClasses: Record<string, string> = {
       spinner: 'animate-spin',
-      refresh: 'animate-spin', // Add refresh animation support
-      // Add more animated icons here as needed
+      refresh: 'animate-spin', 
     };
     
-    // Build final classes
     $: iconClasses = [
       sizeClasses[size],
       animate && animationClasses[name] ? animationClasses[name] : '',
       className
     ].filter(Boolean).join(' ');
     
-    // Icon path
     $: iconPath = `/icons/${name}.svg`;
   </script>
   
@@ -48,7 +43,6 @@
   />
   
   <style>
-    /* Ensure icons inherit text color by default */
     img {
       display: inline-block;
       vertical-align: middle;

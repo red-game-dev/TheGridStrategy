@@ -22,10 +22,8 @@
   let errorMessages: string[] = [];
   let localError = '';
   
-  // Get current strategy for validation
   $: currentStrategy = strategyRegistry.get($strategyStore.strategyKey);
 
-  // Reactive validation
   $: validation = $validationStore;
   $: {
     if (deposit.token?.key) {
@@ -36,7 +34,6 @@
     }
   }
   
-  // Find token info
   $: if (deposit.token?.key && allTokenInfos) {
     const info = allTokenInfos.find((token: TokenInfo) => 
       token.address === deposit.token?.key
@@ -51,7 +48,6 @@
     }
   });
   
-  // Load existing deposit amount from GUI
   function loadDepositAmount() {
     if (!gui || !deposit.token?.key) return;
     
@@ -71,10 +67,9 @@
   
   function validateInput(value: string): string {
     if (!value || value.trim() === '') {
-      return ''; // Empty is valid
+      return '';
     }
     
-    // Check if it's a valid number format
     if (!/^\d*\.?\d*$/.test(value)) {
       return 'Must be a valid number (digits and decimal point only)';
     }
@@ -93,12 +88,11 @@
       return 'Amount must be greater than 0';
     }
     
-    // Check for reasonable maximum (optional - adjust as needed)
     if (num > 1000000000) {
       return 'Amount seems unreasonably large';
     }
     
-    return ''; // Valid
+    return '';
   }
   
   function handleInput(event: Event) {
@@ -108,17 +102,14 @@
     
     if (!deposit.token?.key) return;
     
-    // Clear previous local error
     localError = '';
     
-    // Validate input
     const validationError = validateInput(value);
     if (validationError) {
       localError = validationError;
-      return; // Don't dispatch if invalid
+      return; 
     }
     
-    // Dispatch change event for valid inputs (including empty)
     dispatch('change', {
       tokenKey: deposit.token.key,
       amount: value.trim()
@@ -126,7 +117,6 @@
   }
   
   function handleBlur() {
-    // Additional validation on blur
     if (inputValue && !localError) {
       const validationError = validateInput(inputValue);
       if (validationError) {
@@ -152,9 +142,8 @@
     const num = parseFloat(amount);
     if (isNaN(num)) return amount;
     
-    // Format to appropriate decimal places based on token
-    const decimals = Math.min(tokenInfo.decimals, 6); // Max 6 decimal places for display
-    return num.toFixed(decimals).replace(/\.?0+$/, ''); // Remove trailing zeros
+    const decimals = Math.min(tokenInfo.decimals, 6);
+    return num.toFixed(decimals).replace(/\.?0+$/, '');
   }
 </script>
 

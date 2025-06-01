@@ -11,13 +11,12 @@
   
   let mounted = false;
   let watchUnsubscribe: (() => void) | null = null;
-  let isDisconnecting = false; // Add flag to prevent race conditions
+  let isDisconnecting = false;
   
   onMount(() => {
     mounted = true;
     
     if (browser) {
-      // Initialize wallet state
       walletStore.initialize().then(() => setupWagmiWatcher());
     }
     
@@ -35,7 +34,6 @@
       
       watchUnsubscribe = watchAccount(config, {
         onChange: (account) => {
-          // Ignore changes during disconnection process
           if (isDisconnecting) {
             debugLog.log('Ignoring account change during disconnection');
             return;
@@ -72,26 +70,21 @@
   
   async function handleDisconnect() {
     try {
-      isDisconnecting = true; // Set flag to prevent watcher interference
+      isDisconnecting = true;
       
-      // Immediately update UI to show disconnected state
       walletStore.setDisconnected();
       
-      // Then perform actual disconnection
       const { disconnect } = await import('@wagmi/core');
       const { config } = await import('$lib/config/wagmi.js');
       
       await disconnect(config);
       
-      // Wait a bit for everything to settle
       await new Promise(resolve => setTimeout(resolve, 200));
       
     } catch (error) {
       console.error('Disconnection failed:', error);
-      // Even if disconnect fails, keep the UI disconnected
       walletStore.setDisconnected();
     } finally {
-      // Re-enable watcher after disconnection is complete
       setTimeout(() => {
         isDisconnecting = false;
       }, 500);
@@ -120,9 +113,7 @@
 {#if mounted && browser}
   <div class="p-4 bg-white rounded-lg border shadow-sm w-full">
     {#if wallet.isConnected && wallet.address}
-      <!-- Connected State - Simple Responsive -->
       <div class="flex flex-col sm:flex-row sm:items-center gap-3">
-        <!-- Status and Account Info -->
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 mb-2">
             <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
@@ -150,7 +141,6 @@
           </div>
         </div>
         
-        <!-- Action Buttons -->
         <div class="flex items-center gap-2 flex-shrink-0">
           <button
             on:click={handleRefresh}
@@ -177,7 +167,6 @@
         </div>
       </div>
     {:else}
-      <!-- Not Connected State -->
       <div class="flex flex-col sm:flex-row items-center gap-4">
         <div class="flex items-center gap-2">
           <div class="w-3 h-3 bg-gray-400 rounded-full"></div>
@@ -200,7 +189,6 @@
       </div>
     {/if}
     
-    <!-- Error State -->
     {#if wallet.error}
       <div class="mt-3 flex items-start gap-2 text-red-600 text-sm bg-red-50 p-3 rounded-md">
         <Icon name="alert-circle" size="sm" classNames="mt-0.5 flex-shrink-0" />
@@ -216,7 +204,6 @@
     {/if}
   </div>
 {:else}
-  <!-- Loading state -->
   <div class="p-4 bg-white rounded-lg border shadow-sm">
     <div class="animate-pulse flex flex-col sm:flex-row items-center gap-4">
       <div class="w-3 h-3 bg-gray-200 rounded-full"></div>

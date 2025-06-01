@@ -7,7 +7,7 @@
   import { strategyRegistry } from '$lib/strategies';
   
   export let index: number;
-  export let label: string; // 'Input' or 'Output'
+  export let label: string;
   export let vault: OrderIOCfg;
   export let gui: DotrainOrderGui | null;
   export let allTokenInfos: TokenInfo[];
@@ -22,10 +22,8 @@
   let errorMessages: string[] = [];
   let localError = '';
   
-  // Get current strategy for validation
   $: currentStrategy = strategyRegistry.get($strategyStore.strategyKey);
   
-  // Reactive validation
   $: validation = $validationStore;
   $: {
     const isInput = label === 'Input';
@@ -36,7 +34,6 @@
     errorMessages = localError ? [localError, ...validationErrors] : validationErrors;
   }
   
-  // Find token info based on vault token key
   $: if (vault.token?.key && allTokenInfos) {
     const info = allTokenInfos.find((token: TokenInfo) => 
       token.address === vault.token?.key
@@ -51,7 +48,6 @@
     }
   });
   
-  // Load existing vault ID from GUI
   function loadVaultId() {
     if (!gui) return;
     
@@ -61,7 +57,6 @@
         const vaultIds = result.value;
         const isInput = label === 'Input';
         
-        // Get the vault ID for this specific index and type
         const vaultIdArray = isInput ? vaultIds.get('input') : vaultIds.get('output');
         const vaultId = vaultIdArray?.[index];
         
@@ -77,10 +72,9 @@
   
   function validateInput(value: string): string {
     if (!value || value.trim() === '') {
-      return ''; // Empty is valid (optional)
+      return ''; 
     }
     
-    // Check if it's a valid number format
     if (!/^\d+$/.test(value)) {
       return 'Vault ID must be a positive integer';
     }
@@ -99,12 +93,11 @@
       return 'Vault ID must be greater than 0';
     }
     
-    // Check for reasonable maximum
     if (num > 1000000) {
       return 'Vault ID seems unreasonably large';
     }
     
-    return ''; // Valid
+    return '';
   }
   
   function handleInput(event: Event) {
@@ -112,17 +105,14 @@
     const value = target.value.trim();
     inputValue = value;
     
-    // Clear previous local error
     localError = '';
     
-    // Local validation first
     const validationError = validateInput(value);
     if (validationError) {
       localError = validationError;
-      return; // Don't dispatch if invalid
+      return;
     }
     
-    // Save to GUI
     if (gui) {
       try {
         const isInput = label === 'Input';
@@ -135,10 +125,8 @@
       }
     }
     
-    // Optional: Use dynamic validation if strategy supports it
     if (currentStrategy && value.trim()) {
       try {
-        // Create a mock field metadata for vault IDs
         const mockFieldBinding = `vaultIds.${label === 'Input' ? 'input' : 'output'}.${index}`;
         debugLog.log(`Dynamic validation for vault ID ${mockFieldBinding}:`, value);
       } catch (error) {
@@ -146,7 +134,6 @@
       }
     }
     
-    // Dispatch change event for valid inputs (including empty)
     dispatch('change', { 
       index, 
       label, 
@@ -155,7 +142,6 @@
   }
   
   function handleBlur() {
-    // Additional validation on blur
     if (inputValue && !localError) {
       const validationError = validateInput(inputValue);
       if (validationError) {

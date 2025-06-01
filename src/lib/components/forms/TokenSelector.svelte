@@ -17,7 +17,6 @@
     let isChecking = false;
     let checkingTimeout: ReturnType<typeof setTimeout>;
     
-    // Create a debounced validation function
     const debouncedValidate = debounce(validateToken, 1000);
     
     onMount(async () => {
@@ -47,11 +46,9 @@
         return;
       }
       
-      // Set checking state with timeout protection
       setChecking(true);
       
       try {
-        // First dispatch the change event
         debugLog.log(`[${token.key}] Dispatching change event`);
         
         debugLog.log('Calling gui.saveSelectToken...');
@@ -59,7 +56,6 @@
         await gui.removeSelectToken(token.key);
         await gui.saveSelectToken(token.key, address);
 
-        // Now try to get token info
         debugLog.log(`[${token.key}] Getting token info`);
         const result = await gui.getTokenInfo(token.key);
 
@@ -87,7 +83,6 @@
       isChecking = checking;
       
       if (checking) {
-        // Safety timeout to prevent infinite checking
         clearTimeout(checkingTimeout);
         checkingTimeout = setTimeout(() => {
           debugLog.log(`[${token.key}] Checking timeout - forcing stop`);
@@ -95,7 +90,7 @@
           if (!tokenInfo && !error) {
             error = 'Validation timeout';
           }
-        }, 10000); // 10 second timeout
+        }, 10000);
       } else {
         clearTimeout(checkingTimeout);
       }
@@ -130,16 +125,13 @@
       
       inputValue = newValue;
       
-      // Reset state immediately
       resetState();
       
-      // Only validate if we have a potential address
       if (newValue && newValue.length >= 10) {
         debouncedValidate(newValue);
       }
     }
     
-    // Manual validation trigger for testing
     function forceValidate() {
       if (inputValue) {
         resetState();
@@ -147,12 +139,10 @@
       }
     }
     
-    // Cleanup on destroy
     function cleanup() {
       clearTimeout(checkingTimeout);
     }
     
-    // Reset if GUI becomes unavailable
     $: if (!gui && isChecking) {
       resetState();
       error = 'GUI not available';
@@ -218,7 +208,6 @@
         class:border-blue-300={isChecking}
       />
       
-      <!-- Manual validation button for testing -->
       <button
         type="button"
         on:click={forceValidate}
