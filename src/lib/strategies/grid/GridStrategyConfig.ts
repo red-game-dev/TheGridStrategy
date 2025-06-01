@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { StrategyConfig, StrategyCalculations } from '../base/types';
+import type { StrategyConfig, StrategyCalculations, GridLevel } from '../base/types';
 import type { FieldMetadata } from '$lib/types';
 
 /**
@@ -140,7 +140,7 @@ class GridCalculations implements StrategyCalculations {
 				return [];
 			}
 
-			const levels = [];
+			const levels: GridLevel[] = [];
 			for (let i = 0; i < 5; i++) {
 				const price = baselineRatio * Math.pow(1 + growth, i);
 				levels.push({
