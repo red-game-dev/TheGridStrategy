@@ -57,7 +57,6 @@ export default defineConfig({
 						'ethers'
 					],
 					charts: ['chart.js', 'chartjs-adapter-date-fns', 'date-fns'],
-					ui: ['flowbite', 'flowbite-svelte']
 				}
 			}
 		}

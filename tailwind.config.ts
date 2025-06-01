@@ -1,6 +1,4 @@
-import { join } from 'path';
 import type { Config } from 'tailwindcss';
-import flowbite from 'flowbite/plugin';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 
@@ -8,8 +6,6 @@ const config: Config = {
 	darkMode: 'class',
 	content: [
 		'./src/**/*.{html,js,svelte,ts}',
-		'./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}',
-		join(require.resolve('flowbite-svelte'), '../**/*.{html,js,svelte,ts}')
 	],
 	theme: {
 		extend: {
@@ -37,7 +33,7 @@ const config: Config = {
 			}
 		}
 	},
-	plugins: [forms, typography, flowbite]
+	plugins: [forms, typography]
 };
 
 export default config;
