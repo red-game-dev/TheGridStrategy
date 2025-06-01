@@ -1,12 +1,10 @@
-// src/lib/components/forms/NetworkSelector.test.ts
 import { render, screen, fireEvent } from '@testing-library/svelte';
 import { beforeEach, describe, it, expect, vi } from 'vitest';
-import { tick } from 'svelte'; // <--- ADD THIS IMPORT
+import { tick } from 'svelte';
 import NetworkSelector from './NetworkSelector.svelte';
 import { cleanupMocks } from '$lib/utils/tests/utilities';
 import { getNetworkName } from '$lib/utils/helpers';
 
-// Mock getNetworkName (keep this as is)
 vi.mock('$lib/utils/helpers', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('$lib/utils/helpers')>();
 	return {
@@ -76,7 +74,7 @@ describe('NetworkSelector', () => {
 		const ethereumButton = screen.getByRole('button', { name: /Ethereum/i });
 		await fireEvent.click(ethereumButton);
 
-		await tick(); // <--- ADD THIS LINE for consistency
+		await tick();
 
 		expect(mockChangeHandler).not.toHaveBeenCalled();
 	});

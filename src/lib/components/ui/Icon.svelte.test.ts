@@ -65,7 +65,7 @@ describe('Icon Component', () => {
 
 		const icon = screen.getByRole('img');
 		expect(icon).toHaveClass('w-20', 'h-20');
-		expect(icon).not.toHaveClass('w-5', 'h-5'); // Should not have default md classes
+		expect(icon).not.toHaveClass('w-5', 'h-5');
 	});
 
 	it('constructs correct icon path', () => {
