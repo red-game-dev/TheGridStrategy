@@ -3,7 +3,6 @@ import { DynamicSchemaBuilder } from './DynamicSchemaBuilder';
 import type { FieldMetadata } from '$lib/types';
 import type { StrategyConfig } from '$lib/strategies';
 
-
 class MockStrategyConfig implements StrategyConfig {
 	name = 'MockStrategy';
 	description = 'Mock strategy for testing';
@@ -140,7 +139,7 @@ describe('DynamicSchemaBuilder', () => {
 					validation: { required: true }
 				};
 
-                mockStrategy.setAllFieldMetadata([requiredField]);
+				mockStrategy.setAllFieldMetadata([requiredField]);
 
 				const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
@@ -159,9 +158,9 @@ describe('DynamicSchemaBuilder', () => {
 					validation: { required: false }
 				};
 
-                mockStrategy.setAllFieldMetadata([optionalField]);
+				mockStrategy.setAllFieldMetadata([optionalField]);
 
-                const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
+				const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
 				const result = schema.safeParse({
 					parameters: { 'test-optional': '' }
@@ -302,9 +301,9 @@ describe('DynamicSchemaBuilder', () => {
 					}
 				};
 
-                mockStrategy.setAllFieldMetadata([fieldWithCustomMessage]);
+				mockStrategy.setAllFieldMetadata([fieldWithCustomMessage]);
 
-                const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
+				const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
 				const result = schema.safeParse({
 					parameters: { 'test-custom': '' }
@@ -323,7 +322,7 @@ describe('DynamicSchemaBuilder', () => {
 		it('should validate individual field correctly', () => {
 			const errors = DynamicSchemaBuilder.validateField(mockStrategy, 'required-number', '50');
 			expect(errors).toEqual([]);
-		});    
+		});
 
 		it('should return errors for invalid field values', () => {
 			const errors = DynamicSchemaBuilder.validateField(
@@ -339,13 +338,9 @@ describe('DynamicSchemaBuilder', () => {
 				expect(errors.length).toBeGreaterThan(0);
 			}
 		});
-    
+
 		it('should return errors for values outside min/max range', () => {
-			const errors = DynamicSchemaBuilder.validateField(
-				mockStrategy,
-				'required-number',
-				'150'
-			);
+			const errors = DynamicSchemaBuilder.validateField(mockStrategy, 'required-number', '150');
 
 			if (errors.length === 0) {
 				console.warn('validateField method not properly implementing min/max validation');
@@ -373,174 +368,174 @@ describe('DynamicSchemaBuilder', () => {
 	});
 
 	describe('Edge Cases and Error Handling', () => {
-        it('should handle decimal values in number constraints', () => {
-            const decimalConstraintField: FieldMetadata = {
-                binding: 'decimal-field',
-                inputType: 'number',
-                min: '0.1',
-                max: '99.9',
-                placeholder: 'Enter text',
-                helpText: 'Required text field',
-                validation: { required: true }
-            };
+		it('should handle decimal values in number constraints', () => {
+			const decimalConstraintField: FieldMetadata = {
+				binding: 'decimal-field',
+				inputType: 'number',
+				min: '0.1',
+				max: '99.9',
+				placeholder: 'Enter text',
+				helpText: 'Required text field',
+				validation: { required: true }
+			};
 
-            mockStrategy.setAllFieldMetadata([decimalConstraintField]);
-            const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
+			mockStrategy.setAllFieldMetadata([decimalConstraintField]);
+			const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-            expect(
-                schema.safeParse({
-                    parameters: { 'decimal-field': '50.5' }
-                }).success
-            ).toBe(true);
+			expect(
+				schema.safeParse({
+					parameters: { 'decimal-field': '50.5' }
+				}).success
+			).toBe(true);
 
-            const belowMinResult = schema.safeParse({
-                parameters: { 'decimal-field': '0.05' }
-            });
+			const belowMinResult = schema.safeParse({
+				parameters: { 'decimal-field': '0.05' }
+			});
 
-            if (belowMinResult.success) {
-                console.warn('Decimal min validation not implemented - test adjusted');
-                expect(belowMinResult.success).toBe(true);
-            } else {
-                expect(belowMinResult.success).toBe(false);
-            }
+			if (belowMinResult.success) {
+				console.warn('Decimal min validation not implemented - test adjusted');
+				expect(belowMinResult.success).toBe(true);
+			} else {
+				expect(belowMinResult.success).toBe(false);
+			}
 
-            const aboveMaxResult = schema.safeParse({
-                parameters: { 'decimal-field': '100.1' }
-            });
+			const aboveMaxResult = schema.safeParse({
+				parameters: { 'decimal-field': '100.1' }
+			});
 
-            if (aboveMaxResult.success) {
-                console.warn('Decimal max validation not implemented - test adjusted');
-                expect(aboveMaxResult.success).toBe(true);
-            } else {
-                expect(aboveMaxResult.success).toBe(false);
-            }
-        });
+			if (aboveMaxResult.success) {
+				console.warn('Decimal max validation not implemented - test adjusted');
+				expect(aboveMaxResult.success).toBe(true);
+			} else {
+				expect(aboveMaxResult.success).toBe(false);
+			}
+		});
 
-        it('should handle very large and very small numbers', () => {
-            const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
+		it('should handle very large and very small numbers', () => {
+			const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-            const largeNumberResult = schema.safeParse({
-                parameters: {
-                    'required-number': '999999999999',
-                    'required-text': 'valid'
-                }
-            });
+			const largeNumberResult = schema.safeParse({
+				parameters: {
+					'required-number': '999999999999',
+					'required-text': 'valid'
+				}
+			});
 
-            if (largeNumberResult.success) {
-                console.warn('Large number validation not enforced - test adjusted');
-                expect(largeNumberResult.success).toBe(true);
-            } else {
-                expect(largeNumberResult.success).toBe(false);
-            }
+			if (largeNumberResult.success) {
+				console.warn('Large number validation not enforced - test adjusted');
+				expect(largeNumberResult.success).toBe(true);
+			} else {
+				expect(largeNumberResult.success).toBe(false);
+			}
 
-            expect(
-                schema.safeParse({
-                    parameters: {
-                        'required-number': '0.000001',
-                        'required-text': 'valid'
-                    }
-                }).success
-            ).toBe(true);
-        });
+			expect(
+				schema.safeParse({
+					parameters: {
+						'required-number': '0.000001',
+						'required-text': 'valid'
+					}
+				}).success
+			).toBe(true);
+		});
 	});
 
-    describe('Integration with Real Field Types', () => {
-        it('should work with baseline-io-ratio type field', () => {
-            const baselineField: FieldMetadata = {
-                binding: 'baseline-io-ratio',
-                inputType: 'number',
-                min: '0',
-                placeholder: 'Enter text',
-                helpText: 'Required text field',
-                validation: { required: true }
-            };
+	describe('Integration with Real Field Types', () => {
+		it('should work with baseline-io-ratio type field', () => {
+			const baselineField: FieldMetadata = {
+				binding: 'baseline-io-ratio',
+				inputType: 'number',
+				min: '0',
+				placeholder: 'Enter text',
+				helpText: 'Required text field',
+				validation: { required: true }
+			};
 
-            mockStrategy.setAllFieldMetadata([baselineField]);
-            const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
+			mockStrategy.setAllFieldMetadata([baselineField]);
+			const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-            expect(
-                schema.safeParse({
-                    parameters: { 'baseline-io-ratio': '0.5' }
-                }).success
-            ).toBe(true);
+			expect(
+				schema.safeParse({
+					parameters: { 'baseline-io-ratio': '0.5' }
+				}).success
+			).toBe(true);
 
-            expect(
-                schema.safeParse({
-                    parameters: { 'baseline-io-ratio': '1000' }
-                }).success
-            ).toBe(true);
+			expect(
+				schema.safeParse({
+					parameters: { 'baseline-io-ratio': '1000' }
+				}).success
+			).toBe(true);
 
-            const negativeResult = schema.safeParse({
-                parameters: { 'baseline-io-ratio': '-1' }
-            });
+			const negativeResult = schema.safeParse({
+				parameters: { 'baseline-io-ratio': '-1' }
+			});
 
-            if (negativeResult.success) {
-                console.warn('Negative baseline validation not implemented - test adjusted');
-                expect(negativeResult.success).toBe(true);
-            } else {
-                expect(negativeResult.success).toBe(false);
-            }
-        });
+			if (negativeResult.success) {
+				console.warn('Negative baseline validation not implemented - test adjusted');
+				expect(negativeResult.success).toBe(true);
+			} else {
+				expect(negativeResult.success).toBe(false);
+			}
+		});
 
-        it('should work with seconds-per-tranche type field', () => {
-            const secondsField: FieldMetadata = {
-                binding: 'seconds-per-tranche',
-                inputType: 'number',
-                min: '0',
-                max: '31536000', // 1 year in seconds
-                placeholder: 'Enter text',
-                helpText: 'Required text field',
-                validation: { required: false }
-            };
+		it('should work with seconds-per-tranche type field', () => {
+			const secondsField: FieldMetadata = {
+				binding: 'seconds-per-tranche',
+				inputType: 'number',
+				min: '0',
+				max: '31536000', // 1 year in seconds
+				placeholder: 'Enter text',
+				helpText: 'Required text field',
+				validation: { required: false }
+			};
 
-            mockStrategy.setAllFieldMetadata([secondsField]);
-            const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
+			mockStrategy.setAllFieldMetadata([secondsField]);
+			const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-            expect(
-                schema.safeParse({
-                    parameters: { 'seconds-per-tranche': '0' }
-                }).success
-            ).toBe(true);
+			expect(
+				schema.safeParse({
+					parameters: { 'seconds-per-tranche': '0' }
+				}).success
+			).toBe(true);
 
-            expect(
-                schema.safeParse({
-                    parameters: { 'seconds-per-tranche': '3600' }
-                }).success
-            ).toBe(true);
+			expect(
+				schema.safeParse({
+					parameters: { 'seconds-per-tranche': '3600' }
+				}).success
+			).toBe(true);
 
-            expect(
-                schema.safeParse({
-                    parameters: { 'seconds-per-tranche': '86400' }
-                }).success
-            ).toBe(true);
+			expect(
+				schema.safeParse({
+					parameters: { 'seconds-per-tranche': '86400' }
+				}).success
+			).toBe(true);
 
-            const negativeTimeResult = schema.safeParse({
-                parameters: { 'seconds-per-tranche': '-1' }
-            });
+			const negativeTimeResult = schema.safeParse({
+				parameters: { 'seconds-per-tranche': '-1' }
+			});
 
-            if (negativeTimeResult.success) {
-                console.warn('Negative seconds validation not implemented - test adjusted');
-                expect(negativeTimeResult.success).toBe(true);
-            } else {
-                expect(negativeTimeResult.success).toBe(false);
-            }
+			if (negativeTimeResult.success) {
+				console.warn('Negative seconds validation not implemented - test adjusted');
+				expect(negativeTimeResult.success).toBe(true);
+			} else {
+				expect(negativeTimeResult.success).toBe(false);
+			}
 
-            const largeTimeResult = schema.safeParse({
-                parameters: { 'seconds-per-tranche': '99999999' }
-            });
+			const largeTimeResult = schema.safeParse({
+				parameters: { 'seconds-per-tranche': '99999999' }
+			});
 
-            if (largeTimeResult.success) {
-                console.warn('Max seconds validation not implemented - test adjusted');
-                expect(largeTimeResult.success).toBe(true);
-            } else {
-                expect(largeTimeResult.success).toBe(false);
-            }
+			if (largeTimeResult.success) {
+				console.warn('Max seconds validation not implemented - test adjusted');
+				expect(largeTimeResult.success).toBe(true);
+			} else {
+				expect(largeTimeResult.success).toBe(false);
+			}
 
-            expect(
-                schema.safeParse({
-                    parameters: { 'seconds-per-tranche': '' }
-                }).success
-            ).toBe(true);
-        });
-    });
+			expect(
+				schema.safeParse({
+					parameters: { 'seconds-per-tranche': '' }
+				}).success
+			).toBe(true);
+		});
+	});
 });

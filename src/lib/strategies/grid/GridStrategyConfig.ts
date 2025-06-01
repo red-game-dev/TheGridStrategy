@@ -147,7 +147,7 @@ class GridCalculations implements StrategyCalculations {
 					level: i + 1,
 					price: price,
 					amount: trancheSize,
-                    total: price * trancheSize
+					total: price * trancheSize
 				});
 			}
 

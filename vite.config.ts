@@ -56,7 +56,7 @@ export default defineConfig({
 						'wagmi',
 						'ethers'
 					],
-					charts: ['chart.js', 'chartjs-adapter-date-fns', 'date-fns'],
+					charts: ['chart.js', 'chartjs-adapter-date-fns', 'date-fns']
 				}
 			}
 		}

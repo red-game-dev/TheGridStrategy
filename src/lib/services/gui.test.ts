@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-
 vi.mock('@rainlanguage/orderbook', () => {
 	const mockGuiInstance = {
 		deserializeState: vi.fn(),
@@ -30,7 +29,10 @@ import {
 	prepareDeploymentTransaction
 } from './gui';
 import { DotrainOrderGui } from '@rainlanguage/orderbook';
-import type { DotrainOrderGui as DotrainOrderGuiType, NameAndDescriptionCfg } from '@rainlanguage/orderbook';
+import type {
+	DotrainOrderGui as DotrainOrderGuiType,
+	NameAndDescriptionCfg
+} from '@rainlanguage/orderbook';
 
 const MockDotrainOrderGui = vi.mocked(DotrainOrderGui, true);
 
@@ -42,20 +44,20 @@ describe('GUI Service', () => {
 
 	let mockGuiInstance: any;
 
-    beforeEach(() => {
-        vi.clearAllMocks();
-        mockGuiInstance = {
-            deserializeState: vi.fn(),
-            chooseDeployment: vi.fn(),
-            getComposedRainlang: vi.fn(),
-            getDeploymentTransactionArgs: vi.fn(),
-            free: vi.fn(),
-            getDeposits: vi.fn(),
-            saveDeposit: vi.fn(),
-            removeDeposit: vi.fn()
-        };
-        MockDotrainOrderGui.mockImplementation(() => mockGuiInstance as unknown as DotrainOrderGui);
-    });
+	beforeEach(() => {
+		vi.clearAllMocks();
+		mockGuiInstance = {
+			deserializeState: vi.fn(),
+			chooseDeployment: vi.fn(),
+			getComposedRainlang: vi.fn(),
+			getDeploymentTransactionArgs: vi.fn(),
+			free: vi.fn(),
+			getDeposits: vi.fn(),
+			saveDeposit: vi.fn(),
+			removeDeposit: vi.fn()
+		};
+		MockDotrainOrderGui.mockImplementation(() => mockGuiInstance as unknown as DotrainOrderGui);
+	});
 
 	describe('handleGuiInitialization', () => {
 		it('should initialize GUI successfully without URL state', async () => {
@@ -184,31 +186,34 @@ describe('GUI Service', () => {
 	});
 
 	describe('loadStrategyDetails', () => {
-        it('should load strategy details successfully', async () => {
-            const mockStrategyDetails = {
-                name: 'Grid Strategy',
-                description: 'Automated grid trading',
-                short_description: 'Grid trading strategy'
-            };
-            const mockResult = {
-                error: undefined,
-                value: mockStrategyDetails
-            };
+		it('should load strategy details successfully', async () => {
+			const mockStrategyDetails = {
+				name: 'Grid Strategy',
+				description: 'Automated grid trading',
+				short_description: 'Grid trading strategy'
+			};
+			const mockResult = {
+				error: undefined,
+				value: mockStrategyDetails
+			};
 
-            MockDotrainOrderGui.getStrategyDetails.mockResolvedValue(mockResult);
+			MockDotrainOrderGui.getStrategyDetails.mockResolvedValue(mockResult);
 
-            const result = await loadStrategyDetails(mockDotrain);
+			const result = await loadStrategyDetails(mockDotrain);
 
-            expect(result).toBe(mockStrategyDetails);
-            expect(MockDotrainOrderGui.getStrategyDetails).toHaveBeenCalledWith(mockDotrain);
-        });
+			expect(result).toBe(mockStrategyDetails);
+			expect(MockDotrainOrderGui.getStrategyDetails).toHaveBeenCalledWith(mockDotrain);
+		});
 
-        it('should handle strategy details error', async () => {
-            const mockError = { value: undefined, error: { msg: 'Invalid dotrain config', readableMsg: 'Invalid dotrain config' } };
-            MockDotrainOrderGui.getStrategyDetails.mockResolvedValue(mockError);
-        
-            await expect(loadStrategyDetails(mockDotrain)).rejects.toThrow('Invalid dotrain config');
-        });
+		it('should handle strategy details error', async () => {
+			const mockError = {
+				value: undefined,
+				error: { msg: 'Invalid dotrain config', readableMsg: 'Invalid dotrain config' }
+			};
+			MockDotrainOrderGui.getStrategyDetails.mockResolvedValue(mockError);
+
+			await expect(loadStrategyDetails(mockDotrain)).rejects.toThrow('Invalid dotrain config');
+		});
 
 		it('should handle exceptions during strategy loading', async () => {
 			MockDotrainOrderGui.getStrategyDetails.mockRejectedValue(new Error('Network failure'));
@@ -218,33 +223,68 @@ describe('GUI Service', () => {
 	});
 
 	describe('loadDeploymentDetails', () => {
-        it('should load deployment details successfully', async () => {
-            const mockDeploymentMap = new Map([
-                ['ethereum', { name: 'Ethereum', chainId: 1, description: 'Ethereum Mainnet', short_description: 'ETH' }],
-                ['polygon', { name: 'Polygon', chainId: 137, description: 'Polygon Network', short_description: 'MATIC' }]
-            ]);
-            const mockResult = {
-                error: undefined,
-                value: mockDeploymentMap
-            };
+		it('should load deployment details successfully', async () => {
+			const mockDeploymentMap = new Map([
+				[
+					'ethereum',
+					{
+						name: 'Ethereum',
+						chainId: 1,
+						description: 'Ethereum Mainnet',
+						short_description: 'ETH'
+					}
+				],
+				[
+					'polygon',
+					{
+						name: 'Polygon',
+						chainId: 137,
+						description: 'Polygon Network',
+						short_description: 'MATIC'
+					}
+				]
+			]);
+			const mockResult = {
+				error: undefined,
+				value: mockDeploymentMap
+			};
 
-            MockDotrainOrderGui.getDeploymentDetails.mockResolvedValue(mockResult);
+			MockDotrainOrderGui.getDeploymentDetails.mockResolvedValue(mockResult);
 
-            const result = await loadDeploymentDetails(mockDotrain);
+			const result = await loadDeploymentDetails(mockDotrain);
 
-            expect(result).toEqual([
-                { key: 'ethereum', value: { name: 'Ethereum', chainId: 1, description: 'Ethereum Mainnet', short_description: 'ETH' } },
-                { key: 'polygon', value: { name: 'Polygon', chainId: 137, description: 'Polygon Network', short_description: 'MATIC' } }
-            ]);
-            expect(MockDotrainOrderGui.getDeploymentDetails).toHaveBeenCalledWith(mockDotrain);
-      });
+			expect(result).toEqual([
+				{
+					key: 'ethereum',
+					value: {
+						name: 'Ethereum',
+						chainId: 1,
+						description: 'Ethereum Mainnet',
+						short_description: 'ETH'
+					}
+				},
+				{
+					key: 'polygon',
+					value: {
+						name: 'Polygon',
+						chainId: 137,
+						description: 'Polygon Network',
+						short_description: 'MATIC'
+					}
+				}
+			]);
+			expect(MockDotrainOrderGui.getDeploymentDetails).toHaveBeenCalledWith(mockDotrain);
+		});
 
-        it('should handle deployment details error', async () => {
-            const mockError = { error: { msg: 'No deployments found', readableMsg: 'No deployments found' }, value: undefined };
-            MockDotrainOrderGui.getDeploymentDetails.mockResolvedValue(mockError);
-        
-            await expect(loadDeploymentDetails(mockDotrain)).rejects.toThrow('No deployments found');
-        });
+		it('should handle deployment details error', async () => {
+			const mockError = {
+				error: { msg: 'No deployments found', readableMsg: 'No deployments found' },
+				value: undefined
+			};
+			MockDotrainOrderGui.getDeploymentDetails.mockResolvedValue(mockError);
+
+			await expect(loadDeploymentDetails(mockDotrain)).rejects.toThrow('No deployments found');
+		});
 
 		it('should handle exceptions during deployment loading', async () => {
 			MockDotrainOrderGui.getDeploymentDetails.mockRejectedValue(new Error('Parse error'));
@@ -252,19 +292,19 @@ describe('GUI Service', () => {
 			await expect(loadDeploymentDetails(mockDotrain)).rejects.toThrow('Parse error');
 		});
 
-        it('should handle empty deployment map', async () => {
-            const mockEmptyMap = new Map<string, NameAndDescriptionCfg>();
-            const mockResult = {
-                error: undefined,
-                value: mockEmptyMap
-            };
-        
-            MockDotrainOrderGui.getDeploymentDetails.mockResolvedValue(mockResult);
-        
-            const result = await loadDeploymentDetails(mockDotrain);
-        
-            expect(result).toEqual([]);
-        });
+		it('should handle empty deployment map', async () => {
+			const mockEmptyMap = new Map<string, NameAndDescriptionCfg>();
+			const mockResult = {
+				error: undefined,
+				value: mockEmptyMap
+			};
+
+			MockDotrainOrderGui.getDeploymentDetails.mockResolvedValue(mockResult);
+
+			const result = await loadDeploymentDetails(mockDotrain);
+
+			expect(result).toEqual([]);
+		});
 	});
 
 	describe('getComposedRainlang', () => {
@@ -349,12 +389,15 @@ describe('GUI Service', () => {
 	});
 
 	describe('Error Handling and Edge Cases', () => {
-        it('should handle strategy details error', async () => {
-            const mockError = { value: undefined, error: { msg: 'Invalid dotrain config', readableMsg: 'Invalid dotrain config' } };
-            MockDotrainOrderGui.getStrategyDetails.mockResolvedValue(mockError);
-        
-            await expect(loadStrategyDetails(mockDotrain)).rejects.toThrow('Invalid dotrain config');
-        });
+		it('should handle strategy details error', async () => {
+			const mockError = {
+				value: undefined,
+				error: { msg: 'Invalid dotrain config', readableMsg: 'Invalid dotrain config' }
+			};
+			MockDotrainOrderGui.getStrategyDetails.mockResolvedValue(mockError);
+
+			await expect(loadStrategyDetails(mockDotrain)).rejects.toThrow('Invalid dotrain config');
+		});
 
 		it('should handle network timeouts gracefully', async () => {
 			const timeoutError = new Error('Request timeout');
@@ -363,12 +406,15 @@ describe('GUI Service', () => {
 			await expect(loadStrategyDetails(mockDotrain)).rejects.toThrow('Request timeout');
 		});
 
-        it('should handle strategy details error', async () => {
-            const mockError = { value: undefined, error: { msg: 'Invalid dotrain config', readableMsg: 'Invalid dotrain config' } };
-            MockDotrainOrderGui.getStrategyDetails.mockResolvedValue(mockError);
-        
-            await expect(loadStrategyDetails(mockDotrain)).rejects.toThrow('Invalid dotrain config');
-        });
+		it('should handle strategy details error', async () => {
+			const mockError = {
+				value: undefined,
+				error: { msg: 'Invalid dotrain config', readableMsg: 'Invalid dotrain config' }
+			};
+			MockDotrainOrderGui.getStrategyDetails.mockResolvedValue(mockError);
+
+			await expect(loadStrategyDetails(mockDotrain)).rejects.toThrow('Invalid dotrain config');
+		});
 
 		it('should handle GUI instance creation failure', async () => {
 			MockDotrainOrderGui.mockImplementationOnce(() => {
@@ -436,36 +482,36 @@ describe('GUI Service', () => {
 			);
 		});
 
-        it('should handle complex deployment scenarios', async () => {
-            const complexDeploymentMap = new Map([
-                [
-                    'ethereum',
-                    {
-                        name: 'Ethereum Mainnet',
-                        chainId: 1,
-                        description: 'Ethereum Mainnet network',
-                        short_description: 'ETH'
-                    }
-                ],
-                [
-                    'base',
-                    {
-                        name: 'Base',
-                        chainId: 8453,
-                        description: 'Base network',
-                        short_description: 'BASE'
-                    }
-                ]
-            ]);
-        
-            const mockResult = { error: undefined, value: complexDeploymentMap };
-            MockDotrainOrderGui.getDeploymentDetails.mockResolvedValue(mockResult);
-        
-            const result = await loadDeploymentDetails(mockDotrain);
-        
-            expect(result).toHaveLength(2);
-            expect(result[0].key).toBe('ethereum');
-            expect(result[1].key).toBe('base');
-        });
+		it('should handle complex deployment scenarios', async () => {
+			const complexDeploymentMap = new Map([
+				[
+					'ethereum',
+					{
+						name: 'Ethereum Mainnet',
+						chainId: 1,
+						description: 'Ethereum Mainnet network',
+						short_description: 'ETH'
+					}
+				],
+				[
+					'base',
+					{
+						name: 'Base',
+						chainId: 8453,
+						description: 'Base network',
+						short_description: 'BASE'
+					}
+				]
+			]);
+
+			const mockResult = { error: undefined, value: complexDeploymentMap };
+			MockDotrainOrderGui.getDeploymentDetails.mockResolvedValue(mockResult);
+
+			const result = await loadDeploymentDetails(mockDotrain);
+
+			expect(result).toHaveLength(2);
+			expect(result[0].key).toBe('ethereum');
+			expect(result[1].key).toBe('base');
+		});
 	});
 });

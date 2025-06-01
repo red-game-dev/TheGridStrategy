@@ -6,7 +6,7 @@ import type {
 	GuiSelectTokensCfg,
 	NameAndDescriptionCfg,
 	OrderIOCfg,
-	TokenInfo,
+	TokenInfo
 } from '@rainlanguage/orderbook';
 import type { StrategyType } from '$lib/strategies';
 
@@ -138,7 +138,6 @@ export interface WalletState {
 	networkName?: string;
 }
 
-
 export interface StrategyDeployment {
 	key: string;
 	value: NameAndDescriptionCfg | undefined;
@@ -214,7 +213,7 @@ export interface ChartDataPoint {
 	/** Level of grid */
 	level: number;
 }
-  
+
 /**
  * Re-export types from @rainlanguage/orderbook for convenience
  */
@@ -239,7 +238,6 @@ export const NETWORK_NAMES: Record<string, string> = {
 	bsc: 'BSC',
 	flare: 'Flare'
 } as const;
-
 
 export const NETWORK_NAMES_BY_CHAIN_ID: Record<number, string> = {
 	1: 'Ethereum',

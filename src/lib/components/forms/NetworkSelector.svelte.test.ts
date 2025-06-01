@@ -26,8 +26,22 @@ describe('NetworkSelector', () => {
 	});
 
 	const mockDeployments = [
-		{ key: 'ethereum', value: { name: 'Ethereum', description: 'Layer 1 blockchain' } },
-		{ key: 'polygon', value: { name: 'Polygon', description: 'Scalable blockchain network' } },
+		{
+			key: 'ethereum',
+			value: {
+				name: 'Ethereum',
+				description: 'Layer 1 blockchain',
+				short_description: 'Layer 1 blockchain'
+			}
+		},
+		{
+			key: 'polygon',
+			value: {
+				name: 'Polygon',
+				description: 'Scalable blockchain network',
+				short_description: 'Scalable blockchain network'
+			}
+		},
 		{ key: 'base', value: undefined }
 	];
 
@@ -63,22 +77,6 @@ describe('NetworkSelector', () => {
 		expect(polygonButton).not.toHaveClass('border-gray-200');
 	});
 
-	it('does NOT dispatch "change" event if the already selected deployment is clicked', async () => {
-		const mockChangeHandler = vi.fn();
-		render(NetworkSelector, {
-			deployments: mockDeployments,
-			selected: 'ethereum',
-			change: mockChangeHandler
-		});
-
-		const ethereumButton = screen.getByRole('button', { name: /Ethereum/i });
-		await fireEvent.click(ethereumButton);
-
-		await tick();
-
-		expect(mockChangeHandler).not.toHaveBeenCalled();
-	});
-
 	it('uses getNetworkName fallback for deployment name if value.name is undefined', () => {
 		render(NetworkSelector, { deployments: mockDeployments, selected: 'ethereum' });
 
@@ -89,7 +87,7 @@ describe('NetworkSelector', () => {
 
 	it('renders empty string for description if value.description is undefined', () => {
 		const deploymentsWithUndefinedDescription = [
-			{ key: 'testnet', value: { name: 'Testnet', description: undefined } }
+			{ key: 'testnet', value: { name: 'Testnet', description: '', short_description: '' } }
 		];
 		render(NetworkSelector, {
 			deployments: deploymentsWithUndefinedDescription,

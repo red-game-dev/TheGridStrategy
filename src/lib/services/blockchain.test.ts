@@ -14,11 +14,10 @@ vi.mock('@wagmi/core', () => ({
 }));
 
 vi.mock('$lib/config/wagmi', () => ({
-	config: { 
-		mockWagmiConfig: true 
+	config: {
+		mockWagmiConfig: true
 	}
 }));
-
 
 describe('Blockchain Service', () => {
 	beforeEach(() => {

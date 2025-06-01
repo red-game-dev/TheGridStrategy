@@ -113,9 +113,9 @@ describe('GridStrategyConfig', () => {
 	describe('Validation Schema', () => {
 		const validData = {
 			parameters: {
-                'baseline-io-ratio': '0.5',
-                'io-ratio-growth': '0.05', 
-                'tranche-size': '100',
+				'baseline-io-ratio': '0.5',
+				'io-ratio-growth': '0.05',
+				'tranche-size': '100',
 				'seconds-per-tranche': '3600'
 			},
 			deposits: {
@@ -126,98 +126,98 @@ describe('GridStrategyConfig', () => {
 				output: { token2: '2' }
 			}
 		};
-        const minimalValidData = {
-            parameters: {
-                'baseline-io-ratio': '1',
-                'io-ratio-growth': '0.1',
-                'tranche-size': '100'
-            }
-        };
+		const minimalValidData = {
+			parameters: {
+				'baseline-io-ratio': '1',
+				'io-ratio-growth': '0.1',
+				'tranche-size': '100'
+			}
+		};
 
-        it('should validate minimal correct data', () => {
-            const schema = gridStrategy.getValidationSchema();
-            const result = schema.safeParse(minimalValidData);
+		it('should validate minimal correct data', () => {
+			const schema = gridStrategy.getValidationSchema();
+			const result = schema.safeParse(minimalValidData);
 
-            if (!result.success) {
-                console.log('Validation errors:', result.error.issues);
-            }
+			if (!result.success) {
+				console.log('Validation errors:', result.error.issues);
+			}
 
-            expect(result.success).toBe(true);
-        });        
-
-		describe('Parameter Validation', () => {
-            it('should accept valid io-ratio-growth values', () => {
-                const testCases = ['0.1', '1', '5'];
-
-                testCases.forEach((value) => {
-                    const data = {
-                        ...minimalValidData,
-                        parameters: { ...minimalValidData.parameters, 'io-ratio-growth': value }
-                    };
-
-                    const schema = gridStrategy.getValidationSchema();
-                    const result = schema.safeParse(data);
-
-                    if (!result.success) {
-                        console.log(`Failed for io-ratio-growth: ${value}`, result.error.issues);
-                    }
-
-                    expect(result.success).toBe(true);
-                });
-            });
-
-            it('should accept valid tranche-size values', () => {
-                const testCases = ['1', '100', '1000'];
-
-                testCases.forEach((value) => {
-                    const data = {
-                        ...minimalValidData,
-                        parameters: { ...minimalValidData.parameters, 'tranche-size': value }
-                    };
-
-                    const schema = gridStrategy.getValidationSchema();
-                    const result = schema.safeParse(data);
-
-                    if (!result.success) {
-                        console.log(`Failed for tranche-size: ${value}`, result.error.issues);
-                    }
-
-                    expect(result.success).toBe(true);
-                });
-            });
-
-            it('should handle optional seconds-per-tranche', () => {
-                // Test with completely omitted optional field
-                const data = { ...minimalValidData };
-
-                const schema = gridStrategy.getValidationSchema();
-                const result = schema.safeParse(data);
-
-                if (!result.success) {
-                    console.log('Failed without seconds-per-tranche:', result.error.issues);
-                }
-
-                expect(result.success).toBe(true);
-            });
+			expect(result.success).toBe(true);
 		});
 
-        describe('Optional Fields', () => {
-            it('should allow completely missing optional sections', () => {
-                // Test with only required parameters
-                const data = {
-                    parameters: minimalValidData.parameters
-                };
+		describe('Parameter Validation', () => {
+			it('should accept valid io-ratio-growth values', () => {
+				const testCases = ['0.1', '1', '5'];
 
-                const schema = gridStrategy.getValidationSchema();
-                const result = schema.safeParse(data);
+				testCases.forEach((value) => {
+					const data = {
+						...minimalValidData,
+						parameters: { ...minimalValidData.parameters, 'io-ratio-growth': value }
+					};
 
-                if (!result.success) {
-                    console.log('Failed with minimal data:', result.error.issues);
-                }
+					const schema = gridStrategy.getValidationSchema();
+					const result = schema.safeParse(data);
 
-                expect(result.success).toBe(true);
-            });
-        });
+					if (!result.success) {
+						console.log(`Failed for io-ratio-growth: ${value}`, result.error.issues);
+					}
+
+					expect(result.success).toBe(true);
+				});
+			});
+
+			it('should accept valid tranche-size values', () => {
+				const testCases = ['1', '100', '1000'];
+
+				testCases.forEach((value) => {
+					const data = {
+						...minimalValidData,
+						parameters: { ...minimalValidData.parameters, 'tranche-size': value }
+					};
+
+					const schema = gridStrategy.getValidationSchema();
+					const result = schema.safeParse(data);
+
+					if (!result.success) {
+						console.log(`Failed for tranche-size: ${value}`, result.error.issues);
+					}
+
+					expect(result.success).toBe(true);
+				});
+			});
+
+			it('should handle optional seconds-per-tranche', () => {
+				// Test with completely omitted optional field
+				const data = { ...minimalValidData };
+
+				const schema = gridStrategy.getValidationSchema();
+				const result = schema.safeParse(data);
+
+				if (!result.success) {
+					console.log('Failed without seconds-per-tranche:', result.error.issues);
+				}
+
+				expect(result.success).toBe(true);
+			});
+		});
+
+		describe('Optional Fields', () => {
+			it('should allow completely missing optional sections', () => {
+				// Test with only required parameters
+				const data = {
+					parameters: minimalValidData.parameters
+				};
+
+				const schema = gridStrategy.getValidationSchema();
+				const result = schema.safeParse(data);
+
+				if (!result.success) {
+					console.log('Failed with minimal data:', result.error.issues);
+				}
+
+				expect(result.success).toBe(true);
+			});
+		});
 
 		describe('Deposits Validation', () => {
 			it('should allow optional deposits', () => {
@@ -368,30 +368,30 @@ describe('GridStrategyConfig', () => {
 		});
 
 		describe('calculateGridLevels', () => {
-            it('should calculate grid levels for valid inputs', () => {
-                const calculations = gridStrategy.getCalculations();
-                if (!calculations?.calculateGridLevels) {
-                    throw new Error('calculateGridLevels is not defined');
-                }
-                const gridLevels = calculations.calculateGridLevels(validFieldValues);
+			it('should calculate grid levels for valid inputs', () => {
+				const calculations = gridStrategy.getCalculations();
+				if (!calculations?.calculateGridLevels) {
+					throw new Error('calculateGridLevels is not defined');
+				}
+				const gridLevels = calculations.calculateGridLevels(validFieldValues);
 
-                expect(gridLevels).toHaveLength(5);
+				expect(gridLevels).toHaveLength(5);
 
-                expect(gridLevels[0]).toEqual({
-                    level: 1,
-                    price: 0.5,
-                    amount: 100,
-                    total: 50
-                });
+				expect(gridLevels[0]).toEqual({
+					level: 1,
+					price: 0.5,
+					amount: 100,
+					total: 50
+				});
 
-                expect(gridLevels[1].level).toBe(2);
-                expect(gridLevels[1].price).toBeCloseTo(0.55, 10);
-                expect(gridLevels[1].amount).toBe(100);
-                expect(gridLevels[1].total).toBeCloseTo(55, 10);
+				expect(gridLevels[1].level).toBe(2);
+				expect(gridLevels[1].price).toBeCloseTo(0.55, 10);
+				expect(gridLevels[1].amount).toBe(100);
+				expect(gridLevels[1].total).toBeCloseTo(55, 10);
 
-                expect(gridLevels[1].price).toBeGreaterThan(gridLevels[0].price);
-                expect(gridLevels[2].price).toBeGreaterThan(gridLevels[1].price);
-            });
+				expect(gridLevels[1].price).toBeGreaterThan(gridLevels[0].price);
+				expect(gridLevels[2].price).toBeGreaterThan(gridLevels[1].price);
+			});
 
 			it('should return empty array for missing baseline ratio', () => {
 				const calculations = gridStrategy.getCalculations();
@@ -512,12 +512,12 @@ describe('GridStrategyConfig', () => {
 	describe('Error Handling', () => {
 		it('should handle errors in calculations gracefully', () => {
 			const calculations = gridStrategy.getCalculations();
-            if (!calculations?.calculateGridLevels) {
-                throw new Error('calculateGridLevels is not defined');
-            }
-            if (!calculations?.calculateGridLevels) {
-                throw new Error('calculateGridLevels is not defined');
-            }
+			if (!calculations?.calculateGridLevels) {
+				throw new Error('calculateGridLevels is not defined');
+			}
+			if (!calculations?.calculateGridLevels) {
+				throw new Error('calculateGridLevels is not defined');
+			}
 
 			expect(calculations.calculateMaxReturns({})).toBe(0);
 			expect(calculations.calculateGridLevels({})).toEqual([]);
@@ -534,12 +534,12 @@ describe('GridStrategyConfig', () => {
 
 		it('should handle edge cases in field values', () => {
 			const calculations = gridStrategy.getCalculations();
-            if (!calculations?.calculateGridLevels) {
-                throw new Error('calculateGridLevels is not defined');
-            }
-            if (!calculations?.calculateGridLevels) {
-                throw new Error('calculateGridLevels is not defined');
-            }
+			if (!calculations?.calculateGridLevels) {
+				throw new Error('calculateGridLevels is not defined');
+			}
+			if (!calculations?.calculateGridLevels) {
+				throw new Error('calculateGridLevels is not defined');
+			}
 
 			const emptyStrings = {
 				'baseline-io-ratio': '',
@@ -564,12 +564,12 @@ describe('GridStrategyConfig', () => {
 	describe('Integration Tests', () => {
 		it('should work with realistic trading scenarios', () => {
 			const calculations = gridStrategy.getCalculations();
-            if (!calculations?.calculateGridLevels) {
-                throw new Error('calculateGridLevels is not defined');
-            }
-            if (!calculations?.calculateGridLevels) {
-                throw new Error('calculateGridLevels is not defined');
-            }
+			if (!calculations?.calculateGridLevels) {
+				throw new Error('calculateGridLevels is not defined');
+			}
+			if (!calculations?.calculateGridLevels) {
+				throw new Error('calculateGridLevels is not defined');
+			}
 
 			const ethUsdcGrid = {
 				'baseline-io-ratio': '2000',
@@ -589,12 +589,12 @@ describe('GridStrategyConfig', () => {
 
 		it('should handle micro-trading scenarios', () => {
 			const calculations = gridStrategy.getCalculations();
-            if (!calculations?.calculateGridLevels) {
-                throw new Error('calculateGridLevels is not defined');
-            }
-            if (!calculations?.calculateGridLevels) {
-                throw new Error('calculateGridLevels is not defined');
-            }
+			if (!calculations?.calculateGridLevels) {
+				throw new Error('calculateGridLevels is not defined');
+			}
+			if (!calculations?.calculateGridLevels) {
+				throw new Error('calculateGridLevels is not defined');
+			}
 
 			const microTradingGrid = {
 				'baseline-io-ratio': '0.000001',

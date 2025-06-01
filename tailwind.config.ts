@@ -4,9 +4,7 @@ import typography from '@tailwindcss/typography';
 
 const config: Config = {
 	darkMode: 'class',
-	content: [
-		'./src/**/*.{html,js,svelte,ts}',
-	],
+	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
 			fontFamily: {

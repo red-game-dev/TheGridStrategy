@@ -4,62 +4,62 @@
 
 /* Custom styles */
 @layer base {
-  html {
-    font-family: 'Inter', system-ui, sans-serif;
-  }
-  
-  body {
-    @apply bg-gray-50 text-gray-900;
-  }
+	html {
+		font-family: 'Inter', system-ui, sans-serif;
+	}
+
+	body {
+		@apply bg-gray-50 text-gray-900;
+	}
 }
 
 @layer components {
-  .btn-primary {
-    @apply px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors;
-  }
-  
-  .btn-secondary {
-    @apply px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors;
-  }
-  
-  .input-field {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors;
-  }
-  
-  .card {
-    @apply bg-white rounded-lg shadow-md p-6;
-  }
-  
-  .card-header {
-    @apply text-xl font-semibold text-gray-800 mb-4;
-  }
+	.btn-primary {
+		@apply rounded-lg bg-blue-600 px-6 py-2 font-medium text-white transition-colors hover:bg-blue-700;
+	}
+
+	.btn-secondary {
+		@apply rounded-lg border border-gray-300 px-6 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50;
+	}
+
+	.input-field {
+		@apply w-full rounded-lg border border-gray-300 px-3 py-2 transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500;
+	}
+
+	.card {
+		@apply rounded-lg bg-white p-6 shadow-md;
+	}
+
+	.card-header {
+		@apply mb-4 text-xl font-semibold text-gray-800;
+	}
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+	.text-balance {
+		text-wrap: balance;
+	}
 }
 
 /* Chart.js responsive fixes */
 .chart-container {
-  position: relative;
-  height: 320px;
-  width: 100%;
+	position: relative;
+	height: 320px;
+	width: 100%;
 }
 
 /* Loading states */
 .loading-shimmer {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+	background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+	background-size: 200% 100%;
+	animation: shimmer 2s infinite;
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
 }

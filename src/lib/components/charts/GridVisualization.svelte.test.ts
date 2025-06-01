@@ -146,7 +146,7 @@ describe('GridVisualization Component', () => {
 		});
 
 		const totalCapitalElements = screen.getAllByText('$2850.00');
-		expect(totalCapitalElements).toHaveLength(2); 
+		expect(totalCapitalElements).toHaveLength(2);
 
 		const tableFooterTotal = totalCapitalElements.find((el) =>
 			el.classList.contains('text-green-600')
@@ -163,7 +163,7 @@ describe('GridVisualization Component', () => {
 
 		await waitFor(() => {
 			const rows = screen.getAllByRole('row');
-			expect(rows.length).toBeGreaterThan(3); 
+			expect(rows.length).toBeGreaterThan(3);
 		});
 	});
 
@@ -226,7 +226,7 @@ describe('GridVisualization Component', () => {
 	it('validates grid level data correctly', async () => {
 		const mixedGridLevels: GridLevel[] = [
 			{ level: -1, price: 100, total: 1000, amount: 10 },
-			{ level: -2, price: -95, total: 950, amount: 10 }, 
+			{ level: -2, price: -95, total: 950, amount: 10 },
 			{ level: -3, price: 90, total: 900, amount: 10 }
 		];
 

@@ -40,7 +40,7 @@ export const wagmiAdapter = new WagmiAdapter({
 	}),
 	ssr: false,
 	projectId,
-	networks,
+	networks
 });
 
 /**

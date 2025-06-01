@@ -63,27 +63,27 @@ Object.defineProperty(window, 'matchMedia', {
 // Mock browser environment
 Object.defineProperty(window, 'matchMedia', {
 	writable: true,
-	value: vi.fn().mockImplementation(query => ({
-	  matches: false,
-	  media: query,
-	  onchange: null,
-	  addListener: vi.fn(), // deprecated
-	  removeListener: vi.fn(), // deprecated
-	  addEventListener: vi.fn(),
-	  removeEventListener: vi.fn(),
-	  dispatchEvent: vi.fn(),
-	})),
+	value: vi.fn().mockImplementation((query) => ({
+		matches: false,
+		media: query,
+		onchange: null,
+		addListener: vi.fn(), // deprecated
+		removeListener: vi.fn(), // deprecated
+		addEventListener: vi.fn(),
+		removeEventListener: vi.fn(),
+		dispatchEvent: vi.fn()
+	}))
 });
-  
+
 // Mock fetch for strategy loading
 global.fetch = vi.fn();
-  
+
 // Mock chart.js to avoid canvas issues in tests
 vi.mock('chart.js', () => ({
 	Chart: vi.fn().mockImplementation(() => ({
 		destroy: vi.fn(),
 		update: vi.fn(),
-		data: {},
+		data: {}
 	})),
 	LineController: vi.fn(),
 	BarController: vi.fn(),
@@ -95,21 +95,20 @@ vi.mock('chart.js', () => ({
 	Title: vi.fn(),
 	Tooltip: vi.fn(),
 	Legend: vi.fn(),
-	Filler: vi.fn(),
+	Filler: vi.fn()
 }));
 
 // Mock debug config
 vi.mock('$lib/config/debug', () => ({
 	debugLog: {
-	  log: vi.fn(),
-	  error: vi.fn(),
-	  warn: vi.fn(),
-	  group: vi.fn(),
-	  groupEnd: vi.fn()
+		log: vi.fn(),
+		error: vi.fn(),
+		warn: vi.fn(),
+		group: vi.fn(),
+		groupEnd: vi.fn()
 	},
 	shouldShowDebug: vi.fn(() => false)
-  }));
-
+}));
 
 // Fix the browser environment mock
 vi.mock('$app/environment', () => ({
@@ -117,7 +116,7 @@ vi.mock('$app/environment', () => ({
 	dev: false,
 	building: false,
 	version: '1.0.0'
-  }));
+}));
 
 // Mock window.fs for file reading in tests
 Object.defineProperty(window, 'fs', {
@@ -131,11 +130,11 @@ const originalError = console.error;
 beforeAll(() => {
 	console.error = (...args: any[]) => {
 		if (
-		typeof args[0] === 'string' &&
-		(args[0].includes('Warning: ReactDOM.render is deprecated') ||
-			args[0].includes('Warning: componentWillMount has been renamed'))
+			typeof args[0] === 'string' &&
+			(args[0].includes('Warning: ReactDOM.render is deprecated') ||
+				args[0].includes('Warning: componentWillMount has been renamed'))
 		) {
-		return;
+			return;
 		}
 		originalError.call(console, ...args);
 	};

@@ -28,7 +28,7 @@ export const createMockGridLevel = (overrides = {}) => ({
 	level: 1,
 	price: 100,
 	total: 1000,
-    amount: 10,
+	amount: 10,
 	...overrides
 });
 

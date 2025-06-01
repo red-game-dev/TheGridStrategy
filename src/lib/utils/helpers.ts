@@ -13,7 +13,7 @@ export function getNetworkName(networkKey: string): string {
 }
 
 export function getNetworkNamesByChainId(chainId: number): string | number {
-  return NETWORK_NAMES_BY_CHAIN_ID[chainId] || chainId;
+	return NETWORK_NAMES_BY_CHAIN_ID[chainId] || chainId;
 }
 
 /**
@@ -61,58 +61,58 @@ export function formatNumber(value: number, decimals = 2): string {
  * @returns Debounced function
  */
 export function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
-    func: T,
-    wait: number
+	func: T,
+	wait: number
 ): (...args: Parameters<T>) => Promise<ReturnType<T>> {
-    let timeout: ReturnType<typeof setTimeout>;
-    let lastArgs: Parameters<T>;
+	let timeout: ReturnType<typeof setTimeout>;
+	let lastArgs: Parameters<T>;
 
-    return (...args: Parameters<T>): Promise<ReturnType<T>> => {
-        return new Promise((resolve) => {
-            lastArgs = args;
-            clearTimeout(timeout);
+	return (...args: Parameters<T>): Promise<ReturnType<T>> => {
+		return new Promise((resolve) => {
+			lastArgs = args;
+			clearTimeout(timeout);
 
-            timeout = setTimeout(() => {
-                try {
-                    const result = func(...lastArgs);
-                    resolve(result);
-                } catch (error) {
-                    debugLog.error('Debounced function error:', error);
-                    resolve(undefined as ReturnType<T>);
-                }
-            }, wait);
-        });
-    };
+			timeout = setTimeout(() => {
+				try {
+					const result = func(...lastArgs);
+					resolve(result);
+				} catch (error) {
+					debugLog.error('Debounced function error:', error);
+					resolve(undefined as ReturnType<T>);
+				}
+			}, wait);
+		});
+	};
 }
-  
-  /**
-   * Enhanced address validation with more comprehensive checks
-   * @param address - Address string to validate
-   * @returns True if valid Ethereum address
-   */
-  export function isValidAddress(address: string): boolean {
-    if (!address || typeof address !== 'string') {
-      return false;
-    }
-    
-    const basicCheck = /^0x[a-fA-F0-9]{40}$/.test(address);
-    
-    if (!basicCheck) {
-      return false;
-    }
-    
-    const hex = address.slice(2);
-    
-    if (hex === '0'.repeat(40)) {
-      return false;
-    }
-    
-    if (hex.toLowerCase() === 'f'.repeat(40)) {
-      return false;
-    }
-    
-    return true;
-  }
+
+/**
+ * Enhanced address validation with more comprehensive checks
+ * @param address - Address string to validate
+ * @returns True if valid Ethereum address
+ */
+export function isValidAddress(address: string): boolean {
+	if (!address || typeof address !== 'string') {
+		return false;
+	}
+
+	const basicCheck = /^0x[a-fA-F0-9]{40}$/.test(address);
+
+	if (!basicCheck) {
+		return false;
+	}
+
+	const hex = address.slice(2);
+
+	if (hex === '0'.repeat(40)) {
+		return false;
+	}
+
+	if (hex.toLowerCase() === 'f'.repeat(40)) {
+		return false;
+	}
+
+	return true;
+}
 
 /**
  * Create explorer URL for viewing strategy
@@ -123,7 +123,6 @@ export function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
 export function createExplorerUrl(networkKey: string, orderbookAddress: string): string {
 	return `https://v2.raindex.finance/orders/${networkKey}-${orderbookAddress}`;
 }
-
 
 /**
  * Format balance for display with appropriate decimal places
@@ -136,23 +135,23 @@ export function formatBalance(
 	maxDecimals: number = 4
 ): string {
 	const num = parseFloat(balance.formatted);
-	
+
 	if (num < 0.0001 && num > 0) {
 		return num.toExponential(2);
 	}
-	
+
 	if (num < 1) {
 		return num.toFixed(Math.min(maxDecimals, 6));
 	}
-	
+
 	if (num >= 1000) {
-		return num.toLocaleString(undefined, { 
+		return num.toLocaleString(undefined, {
 			maximumFractionDigits: 2,
 			minimumFractionDigits: 0
 		});
 	}
-	
-	return num.toLocaleString(undefined, { 
+
+	return num.toLocaleString(undefined, {
 		maximumFractionDigits: maxDecimals,
 		minimumFractionDigits: 0
 	});

@@ -160,57 +160,57 @@ describe('Helper Functions', () => {
 		});
 	});
 
-    describe('debounce', () => {
-        beforeEach(() => {
-            vi.useFakeTimers();
-        });
+	describe('debounce', () => {
+		beforeEach(() => {
+			vi.useFakeTimers();
+		});
 
-        afterEach(() => {
-            vi.useRealTimers();
-        });
+		afterEach(() => {
+			vi.useRealTimers();
+		});
 
-        it('should debounce function calls', async () => {
-            const mockFn = vi.fn().mockReturnValue('result');
-            const debouncedFn = debounce(mockFn, 100);
+		it('should debounce function calls', async () => {
+			const mockFn = vi.fn().mockReturnValue('result');
+			const debouncedFn = debounce(mockFn, 100);
 
-            debouncedFn('arg1');
-            debouncedFn('arg2');
-            const finalPromise = debouncedFn('arg3');
+			debouncedFn('arg1');
+			debouncedFn('arg2');
+			const finalPromise = debouncedFn('arg3');
 
-            vi.advanceTimersByTime(100);
+			vi.advanceTimersByTime(100);
 
-            const result = await finalPromise;
+			const result = await finalPromise;
 
-            expect(mockFn).toHaveBeenCalledTimes(1);
-            expect(mockFn).toHaveBeenCalledWith('arg3');
-            expect(result).toBe('result');
-        });
+			expect(mockFn).toHaveBeenCalledTimes(1);
+			expect(mockFn).toHaveBeenCalledWith('arg3');
+			expect(result).toBe('result');
+		});
 
-        it('should handle function errors gracefully', async () => {
-            const mockFn = vi.fn().mockImplementation(() => {
-                throw new Error('Test error');
-            });
-            const debouncedFn = debounce(mockFn, 100);
+		it('should handle function errors gracefully', async () => {
+			const mockFn = vi.fn().mockImplementation(() => {
+				throw new Error('Test error');
+			});
+			const debouncedFn = debounce(mockFn, 100);
 
-            const promise = debouncedFn('arg');
-            vi.advanceTimersByTime(100);
+			const promise = debouncedFn('arg');
+			vi.advanceTimersByTime(100);
 
-            const result = await promise;
-            expect(result).toBeUndefined();
-            expect(mockFn).toHaveBeenCalledWith('arg');
-        });
+			const result = await promise;
+			expect(result).toBeUndefined();
+			expect(mockFn).toHaveBeenCalledWith('arg');
+		});
 
-        it('should return function result for successful calls', async () => {
-            const mockFn = vi.fn().mockReturnValue('success');
-            const debouncedFn = debounce(mockFn, 100);
+		it('should return function result for successful calls', async () => {
+			const mockFn = vi.fn().mockReturnValue('success');
+			const debouncedFn = debounce(mockFn, 100);
 
-            const promise = debouncedFn('arg');
-            vi.advanceTimersByTime(100);
+			const promise = debouncedFn('arg');
+			vi.advanceTimersByTime(100);
 
-            const result = await promise;
-            expect(result).toBe('success');
-        });
-    });
+			const result = await promise;
+			expect(result).toBe('success');
+		});
+	});
 
 	describe('isValidAddress', () => {
 		it('should validate correct Ethereum addresses', () => {

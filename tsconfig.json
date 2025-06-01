@@ -12,14 +12,10 @@
 		"moduleResolution": "bundler",
 		"target": "ES2022",
 		"module": "ESNext",
-		"lib": [
-			"ES2022",
-			"DOM",
-			"DOM.Iterable"
-		],
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
 		"declaration": true,
 		"declarationMap": true,
-		"allowSyntheticDefaultImports": true,
+		"allowSyntheticDefaultImports": true
 	}
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
 	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files

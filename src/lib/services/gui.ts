@@ -1,8 +1,5 @@
 import { DotrainOrderGui } from '@rainlanguage/orderbook';
-import type {
-	DotrainOrderGui as DotrainOrderGuiType,
-	WasmEncodedResult,
-} from '$lib/types';
+import type { DotrainOrderGui as DotrainOrderGuiType, WasmEncodedResult } from '$lib/types';
 
 /**
  * Initialize GUI with enhanced error handling and token pre-population
