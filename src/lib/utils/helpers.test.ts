@@ -13,7 +13,6 @@ import {
 	formatBalance
 } from './helpers';
 
-// Mock the constants
 vi.mock('$lib/config/constants', () => ({
 	NETWORKS: {
 		ethereum: {
@@ -174,18 +173,14 @@ describe('Helper Functions', () => {
             const mockFn = vi.fn().mockReturnValue('result');
             const debouncedFn = debounce(mockFn, 100);
 
-            // Call multiple times rapidly
             debouncedFn('arg1');
             debouncedFn('arg2');
             const finalPromise = debouncedFn('arg3');
 
-            // Fast-forward time to trigger the debounced function
             vi.advanceTimersByTime(100);
 
-            // Wait for the final promise to resolve
             const result = await finalPromise;
 
-            // Should only call once with the last arguments
             expect(mockFn).toHaveBeenCalledTimes(1);
             expect(mockFn).toHaveBeenCalledWith('arg3');
             expect(result).toBe('result');
@@ -336,7 +331,7 @@ describe('Helper Functions', () => {
 				symbol: 'ETH'
 			};
 			// Adjust expectation to match actual output format
-			expect(formatBalance(balance)).toBe('0.5000'); // Your function shows 4 decimal places
+			expect(formatBalance(balance)).toBe('0.5000');
 		});
 
 		it('should format large amounts with thousands separator', () => {
@@ -366,8 +361,7 @@ describe('Helper Functions', () => {
 				formatted: '0.0',
 				symbol: 'ETH'
 			};
-			// Adjust expectation to match actual output
-			expect(formatBalance(balance)).toBe('0.0000'); // Your function shows 4 decimal places for zero
+			expect(formatBalance(balance)).toBe('0.0000');
 		});
 
 		it('should handle edge case with very precise small amounts', () => {

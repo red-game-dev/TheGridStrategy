@@ -9,12 +9,10 @@ import type { Hex } from 'viem';
 
 const mockSendTransaction = vi.mocked(sendTransaction);
 
-// Mock wagmi/core module - fix hoisting issue
 vi.mock('@wagmi/core', () => ({
 	sendTransaction: vi.fn()
 }));
 
-// Mock wagmi config
 vi.mock('$lib/config/wagmi', () => ({
 	config: { 
 		mockWagmiConfig: true 
@@ -111,10 +109,9 @@ describe('Blockchain Service', () => {
 			const tokenAddress = '0x1234567890123456789012345678901234567890';
 			const approvalCalldata = '0xabcdef' as `0x${string}`;
 
-			// Your implementation seems to wrap non-Error objects differently
 			await expect(sendApprovalTransaction(tokenAddress, approvalCalldata)).rejects.toThrow(
 				'Approval failed: Transaction failed'
-			); // Updated expectation
+			);
 		});
 
 		it('should handle user rejection', async () => {
@@ -167,10 +164,9 @@ describe('Blockchain Service', () => {
 			const orderbookAddress = '0x1234567890123456789012345678901234567890';
 			const deploymentCalldata = '0xdeadbeef' as `0x${string}`;
 
-			// Your implementation seems to wrap non-Error objects differently
 			await expect(sendDeploymentTransaction(orderbookAddress, deploymentCalldata)).rejects.toThrow(
 				'Deployment failed: Transaction failed'
-			); // Updated expectation
+			);
 		});
 
 		it('should handle contract revert errors', async () => {
@@ -226,8 +222,7 @@ describe('Blockchain Service', () => {
 			const data = '0xabcdef' as `0x${string}`;
 			const to = '0x1234567890123456789012345678901234567890' as `0x${string}`;
 
-			// Your implementation might pass through empty error messages
-			await expect(sendBlockchainTransaction(data, to)).rejects.toThrow(''); // Updated to expect empty string if that's what your implementation does
+			await expect(sendBlockchainTransaction(data, to)).rejects.toThrow('');
 		});
 	});
 
@@ -236,7 +231,6 @@ describe('Blockchain Service', () => {
 			const mockHash = '0xabcdef';
 			mockSendTransaction.mockResolvedValue(mockHash);
 
-			// Test various valid hex formats
 			const validDataFormats = [
 				'0x',
 				'0x0',
@@ -257,7 +251,6 @@ describe('Blockchain Service', () => {
 			mockSendTransaction.mockResolvedValue(mockHash);
 			const data = '0xabcdef' as `0x${string}`;
 
-			// Test various valid address formats
 			const validAddresses = [
 				'0x0000000000000000000000000000000000000000',
 				'0x1234567890123456789012345678901234567890',
@@ -276,7 +269,6 @@ describe('Blockchain Service', () => {
 			const mockHash = '0xabcdef';
 			mockSendTransaction.mockResolvedValue(mockHash);
 
-			// Real-world approval calldata example (approve function)
 			const complexCalldata =
 				'0x095ea7b3000000000000000000000000a1b2c3d4e5f6789012345678901234567890abcd00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001' as `0x${string}`;
 			const tokenAddress = '0x1234567890123456789012345678901234567890';
@@ -288,7 +280,6 @@ describe('Blockchain Service', () => {
 			const mockHash = '0xabcdef';
 			mockSendTransaction.mockResolvedValue(mockHash);
 
-			// Complex deployment calldata with multiple parameters
 			const complexCalldata =
 				'0x12345678000000000000000000000000a1b2c3d4e5f6789012345678901234567890abcd000000000000000000000000b2c3d4e5f6789012345678901234567890abcdef000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000040' as `0x${string}`;
 			const orderbookAddress = '0x1234567890123456789012345678901234567890';
@@ -359,7 +350,6 @@ describe('Blockchain Service', () => {
 			const mockHash = '0xapproval123';
 			mockSendTransaction.mockResolvedValue(mockHash);
 
-			// Simulate approving USDC for spending
 			const usdcAddress = '0xA0b86a33E6441E0C0A7e88e8C0C8eBC3B7F2e5c2';
 			const approveCalldata =
 				'0x095ea7b3000000000000000000000000spenderaddresshere0000000000000000000000000000000000000000000000000000000000000000000000005af3107a4000' as `0x${string}`;
@@ -371,7 +361,6 @@ describe('Blockchain Service', () => {
 			const mockHash = '0xdeployment456';
 			mockSendTransaction.mockResolvedValue(mockHash);
 
-			// Simulate deploying grid strategy
 			const orderbookAddress = '0xd2938e7c9fe3597f78832ce780feb61945c377d7';
 			const deploymentCalldata = '0xgridstrategydata123456789abcdef' as `0x${string}`;
 

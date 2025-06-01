@@ -2,9 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 
-// Mock the DotrainOrderGui module before importing anything
 vi.mock('@rainlanguage/orderbook', () => {
-	// Create mock instance methods
 	const mockGuiInstance = {
 		deserializeState: vi.fn(),
 		chooseDeployment: vi.fn(),
@@ -12,14 +10,11 @@ vi.mock('@rainlanguage/orderbook', () => {
 		getDeploymentTransactionArgs: vi.fn()
 	};
 
-	// Create the mock constructor
 	const MockDotrainOrderGui = vi.fn().mockImplementation(() => mockGuiInstance);
 
-	// Add static methods to the constructor
 	(MockDotrainOrderGui as any).getStrategyDetails = vi.fn();
 	(MockDotrainOrderGui as any).getDeploymentDetails = vi.fn();
 
-	// Store references for test access
 	MockDotrainOrderGui.prototype.mockInstance = mockGuiInstance;
 
 	return {
@@ -37,7 +32,6 @@ import {
 import { DotrainOrderGui } from '@rainlanguage/orderbook';
 import type { DotrainOrderGui as DotrainOrderGuiType, NameAndDescriptionCfg } from '@rainlanguage/orderbook';
 
-// Type assertion to access our mock
 const MockDotrainOrderGui = vi.mocked(DotrainOrderGui, true);
 
 describe('GUI Service', () => {
@@ -46,12 +40,10 @@ describe('GUI Service', () => {
 	const mockAddress = '0x1234567890123456789012345678901234567890';
 	const mockPushGuiStateToUrlHistory = vi.fn();
 
-	// Get access to the mock instance
 	let mockGuiInstance: any;
 
     beforeEach(() => {
         vi.clearAllMocks();
-        // Create a fresh mock instance for each test
         mockGuiInstance = {
             deserializeState: vi.fn(),
             chooseDeployment: vi.fn(),
@@ -344,7 +336,6 @@ describe('GUI Service', () => {
 		it('should handle invalid address format', async () => {
 			const invalidAddress = 'not-an-address';
 
-			// The service should still call the GUI method, and let it handle validation
 			const mockError = { error: { msg: 'Invalid address format' } };
 			mockGuiInstance.getDeploymentTransactionArgs.mockResolvedValue(mockError);
 
@@ -398,7 +389,6 @@ describe('GUI Service', () => {
 
 	describe('Integration Scenarios', () => {
 		it('should handle complete GUI workflow', async () => {
-			// Step 1: Initialize GUI
 			const initResult = { error: null };
 			mockGuiInstance.chooseDeployment.mockResolvedValue(initResult);
 
@@ -411,7 +401,6 @@ describe('GUI Service', () => {
 
 			expect(guiResult.error).toBeNull();
 
-			// Step 2: Get composed Rainlang
 			const mockRainlang = '#calculate-io...';
 			const rainlangResult = { error: null, value: mockRainlang };
 			mockGuiInstance.getComposedRainlang.mockResolvedValue(rainlangResult);
@@ -419,7 +408,6 @@ describe('GUI Service', () => {
 			const rainlang = await getComposedRainlang(guiResult.gui!);
 			expect(rainlang).toBe(mockRainlang);
 
-			// Step 3: Prepare deployment
 			const mockTxArgs = { calldata: '0xdeadbeef' };
 			const txResult = { error: null, value: mockTxArgs };
 			mockGuiInstance.getDeploymentTransactionArgs.mockResolvedValue(txResult);

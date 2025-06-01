@@ -4,7 +4,6 @@ import type { FieldMetadata } from '$lib/types';
 import type { StrategyConfig } from '$lib/strategies';
 
 
-// Mock strategy configuration for testing
 class MockStrategyConfig implements StrategyConfig {
 	name = 'MockStrategy';
 	description = 'Mock strategy for testing';
@@ -83,7 +82,6 @@ describe('DynamicSchemaBuilder', () => {
 		it('should build a complete schema for strategy', () => {
 			const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-			// Should return a ZodObject with parameters
 			expect(schema).toBeDefined();
 			expect(typeof schema.parse).toBe('function');
 		});
@@ -109,7 +107,6 @@ describe('DynamicSchemaBuilder', () => {
 			const invalidData = {
 				parameters: {
 					'optional-text': 'some text'
-					// Missing required fields
 				}
 			};
 
@@ -124,7 +121,6 @@ describe('DynamicSchemaBuilder', () => {
 				parameters: {
 					'required-number': '25',
 					'required-text': 'required value'
-					// Optional field missing - should be OK
 				}
 			};
 
@@ -146,10 +142,8 @@ describe('DynamicSchemaBuilder', () => {
 
                 mockStrategy.setAllFieldMetadata([requiredField]);
 
-				// Access private method via strategy building
 				const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-				// Test that empty string fails
 				const result = schema.safeParse({
 					parameters: { 'test-required': '' }
 				});
@@ -167,10 +161,8 @@ describe('DynamicSchemaBuilder', () => {
 
                 mockStrategy.setAllFieldMetadata([optionalField]);
 
-                // Access private method via strategy building
                 const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-				// Test that empty string passes for optional field
 				const result = schema.safeParse({
 					parameters: { 'test-optional': '' }
 				});
@@ -191,21 +183,16 @@ describe('DynamicSchemaBuilder', () => {
 				mockStrategy.setAllFieldMetadata([numberField]);
 				const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-				// Valid number should pass
 				expect(
 					schema.safeParse({
 						parameters: { 'test-number': '42' }
 					}).success
 				).toBe(true);
 
-				// Test invalid number - this might be passing in your implementation
-				// Let's check what the actual validation does
 				const invalidResult = schema.safeParse({
 					parameters: { 'test-number': 'not-a-number' }
 				});
 
-				// If your implementation doesn't actually validate numbers,
-				// we should update the test expectation
 				if (invalidResult.success) {
 					console.warn('Number validation not implemented - updating test expectation');
 					expect(invalidResult.success).toBe(true);
@@ -228,14 +215,12 @@ describe('DynamicSchemaBuilder', () => {
 				mockStrategy.setAllFieldMetadata([numberFieldWithConstraints]);
 				const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-				// Valid number within range
 				expect(
 					schema.safeParse({
 						parameters: { 'test-constrained-number': '50' }
 					}).success
 				).toBe(true);
 
-				// Test constraints - if not implemented, adjust expectations
 				const belowMinResult = schema.safeParse({
 					parameters: { 'test-constrained-number': '5' }
 				});
@@ -244,7 +229,6 @@ describe('DynamicSchemaBuilder', () => {
 					parameters: { 'test-constrained-number': '95' }
 				});
 
-				// If min/max validation isn't implemented, update expectations
 				if (belowMinResult.success && aboveMaxResult.success) {
 					console.warn('Min/max validation not implemented - updating test expectations');
 					expect(belowMinResult.success).toBe(true);
@@ -254,7 +238,6 @@ describe('DynamicSchemaBuilder', () => {
 					expect(aboveMaxResult.success).toBe(false);
 				}
 
-				// Boundary tests
 				expect(
 					schema.safeParse({
 						parameters: { 'test-constrained-number': '10' }
@@ -281,26 +264,22 @@ describe('DynamicSchemaBuilder', () => {
 				mockStrategy.setAllFieldMetadata([optionalNumberField]);
 				const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-				// Empty should be valid for optional
 				expect(
 					schema.safeParse({
 						parameters: { 'test-optional-number': '' }
 					}).success
 				).toBe(true);
 
-				// Valid number should work
 				expect(
 					schema.safeParse({
 						parameters: { 'test-optional-number': '25' }
 					}).success
 				).toBe(true);
 
-				// Test min constraint for optional field
 				const belowMinResult = schema.safeParse({
 					parameters: { 'test-optional-number': '-5' }
 				});
 
-				// If validation isn't implemented for optional fields, adjust expectation
 				if (belowMinResult.success) {
 					console.warn('Min validation for optional fields not implemented');
 					expect(belowMinResult.success).toBe(true);
@@ -325,7 +304,6 @@ describe('DynamicSchemaBuilder', () => {
 
                 mockStrategy.setAllFieldMetadata([fieldWithCustomMessage]);
 
-                // Access private method via strategy building
                 const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
 				const result = schema.safeParse({
@@ -354,7 +332,6 @@ describe('DynamicSchemaBuilder', () => {
 				'not-a-number'
 			);
 
-			// If your validateField method doesn't actually validate, adjust expectation
 			if (errors.length === 0) {
 				console.warn('validateField method not properly implemented for number validation');
 				expect(errors.length).toBe(0);
@@ -367,10 +344,9 @@ describe('DynamicSchemaBuilder', () => {
 			const errors = DynamicSchemaBuilder.validateField(
 				mockStrategy,
 				'required-number',
-				'150' // Above max of 100
+				'150'
 			);
 
-			// If min/max validation isn't implemented, adjust expectation
 			if (errors.length === 0) {
 				console.warn('validateField method not properly implementing min/max validation');
 				expect(errors.length).toBe(0);
@@ -411,19 +387,16 @@ describe('DynamicSchemaBuilder', () => {
             mockStrategy.setAllFieldMetadata([decimalConstraintField]);
             const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-            // Valid decimal
             expect(
                 schema.safeParse({
                     parameters: { 'decimal-field': '50.5' }
                 }).success
             ).toBe(true);
 
-            // Test below min - if your validation doesn't work, adjust expectation
             const belowMinResult = schema.safeParse({
                 parameters: { 'decimal-field': '0.05' }
             });
 
-            // If min/max validation isn't working, expect it to pass
             if (belowMinResult.success) {
                 console.warn('Decimal min validation not implemented - test adjusted');
                 expect(belowMinResult.success).toBe(true);
@@ -431,7 +404,6 @@ describe('DynamicSchemaBuilder', () => {
                 expect(belowMinResult.success).toBe(false);
             }
 
-            // Test above max
             const aboveMaxResult = schema.safeParse({
                 parameters: { 'decimal-field': '100.1' }
             });
@@ -447,7 +419,6 @@ describe('DynamicSchemaBuilder', () => {
         it('should handle very large and very small numbers', () => {
             const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-            // Very large number test
             const largeNumberResult = schema.safeParse({
                 parameters: {
                     'required-number': '999999999999',
@@ -455,15 +426,13 @@ describe('DynamicSchemaBuilder', () => {
                 }
             });
 
-            // If your validation allows large numbers, adjust expectation
             if (largeNumberResult.success) {
                 console.warn('Large number validation not enforced - test adjusted');
                 expect(largeNumberResult.success).toBe(true);
             } else {
-                expect(largeNumberResult.success).toBe(false); // Should fail max constraint
+                expect(largeNumberResult.success).toBe(false);
             }
 
-            // Very small decimal
             expect(
                 schema.safeParse({
                     parameters: {
@@ -471,7 +440,7 @@ describe('DynamicSchemaBuilder', () => {
                         'required-text': 'valid'
                     }
                 }).success
-            ).toBe(true); // Should pass if within constraints
+            ).toBe(true);
         });
 	});
 
@@ -489,7 +458,6 @@ describe('DynamicSchemaBuilder', () => {
             mockStrategy.setAllFieldMetadata([baselineField]);
             const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-            // Typical baseline values
             expect(
                 schema.safeParse({
                     parameters: { 'baseline-io-ratio': '0.5' }
@@ -502,12 +470,10 @@ describe('DynamicSchemaBuilder', () => {
                 }).success
             ).toBe(true);
 
-            // Test negative baseline
             const negativeResult = schema.safeParse({
                 parameters: { 'baseline-io-ratio': '-1' }
             });
 
-            // If min validation isn't working, adjust expectation
             if (negativeResult.success) {
                 console.warn('Negative baseline validation not implemented - test adjusted');
                 expect(negativeResult.success).toBe(true);
@@ -530,7 +496,6 @@ describe('DynamicSchemaBuilder', () => {
             mockStrategy.setAllFieldMetadata([secondsField]);
             const schema = DynamicSchemaBuilder.buildSchemaForStrategy(mockStrategy);
 
-            // Valid time values
             expect(
                 schema.safeParse({
                     parameters: { 'seconds-per-tranche': '0' }
@@ -549,12 +514,10 @@ describe('DynamicSchemaBuilder', () => {
                 }).success
             ).toBe(true);
 
-            // Test negative time
             const negativeTimeResult = schema.safeParse({
                 parameters: { 'seconds-per-tranche': '-1' }
             });
 
-            // If validation isn't working, adjust expectation
             if (negativeTimeResult.success) {
                 console.warn('Negative seconds validation not implemented - test adjusted');
                 expect(negativeTimeResult.success).toBe(true);
@@ -562,7 +525,6 @@ describe('DynamicSchemaBuilder', () => {
                 expect(negativeTimeResult.success).toBe(false);
             }
 
-            // Test very large time
             const largeTimeResult = schema.safeParse({
                 parameters: { 'seconds-per-tranche': '99999999' }
             });
@@ -574,7 +536,6 @@ describe('DynamicSchemaBuilder', () => {
                 expect(largeTimeResult.success).toBe(false);
             }
 
-            // Optional field - empty should be valid
             expect(
                 schema.safeParse({
                     parameters: { 'seconds-per-tranche': '' }

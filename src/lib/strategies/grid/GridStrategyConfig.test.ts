@@ -147,7 +147,6 @@ describe('GridStrategyConfig', () => {
 
 		describe('Parameter Validation', () => {
             it('should accept valid io-ratio-growth values', () => {
-                // Test only clearly valid values that should definitely pass
                 const testCases = ['0.1', '1', '5'];
 
                 testCases.forEach((value) => {
@@ -168,7 +167,6 @@ describe('GridStrategyConfig', () => {
             });
 
             it('should accept valid tranche-size values', () => {
-                // Test only clearly valid values
                 const testCases = ['1', '100', '1000'];
 
                 testCases.forEach((value) => {
@@ -223,7 +221,6 @@ describe('GridStrategyConfig', () => {
 
 		describe('Deposits Validation', () => {
 			it('should allow optional deposits', () => {
-				// Test without deposits property at all
 				const data = {
 					parameters: validData.parameters
 				};
@@ -258,7 +255,6 @@ describe('GridStrategyConfig', () => {
 
 		describe('Vault IDs Validation', () => {
 			it('should allow optional vault IDs', () => {
-				// Test without vaultIds property at all
 				const data = {
 					parameters: validData.parameters
 				};
@@ -316,7 +312,7 @@ describe('GridStrategyConfig', () => {
 				// Level 2: 0.5 * 1.1^2 * 100 = 60.5
 				// etc.
 				expect(maxReturns).toBeGreaterThan(0);
-				expect(maxReturns).toBeCloseTo(796.87, 1); // Approximate expected value
+				expect(maxReturns).toBeCloseTo(796.87, 1);
 			});
 
 			it('should return 0 for missing baseline ratio', () => {
@@ -381,7 +377,6 @@ describe('GridStrategyConfig', () => {
 
                 expect(gridLevels).toHaveLength(5);
 
-                // Check first level
                 expect(gridLevels[0]).toEqual({
                     level: 1,
                     price: 0.5,
@@ -389,13 +384,11 @@ describe('GridStrategyConfig', () => {
                     total: 50
                 });
 
-                // Fix the second level test - the error shows price is 0.55, not amount being 100
                 expect(gridLevels[1].level).toBe(2);
-                expect(gridLevels[1].price).toBeCloseTo(0.55, 10); // This should be 0.55
-                expect(gridLevels[1].amount).toBe(100); // This should be 100
-                expect(gridLevels[1].total).toBeCloseTo(55, 10); // This should be ~55
+                expect(gridLevels[1].price).toBeCloseTo(0.55, 10);
+                expect(gridLevels[1].amount).toBe(100);
+                expect(gridLevels[1].total).toBeCloseTo(55, 10);
 
-                // Check that prices increase with growth rate
                 expect(gridLevels[1].price).toBeGreaterThan(gridLevels[0].price);
                 expect(gridLevels[2].price).toBeGreaterThan(gridLevels[1].price);
             });
@@ -448,7 +441,6 @@ describe('GridStrategyConfig', () => {
 				};
 
 				const gridLevels = calculations.calculateGridLevels(fieldValuesZeroGrowth);
-				// Your implementation returns empty array for zero growth, which is valid
 				expect(gridLevels).toEqual([]);
 			});
 
@@ -466,7 +458,6 @@ describe('GridStrategyConfig', () => {
 				const gridLevels = calculations.calculateGridLevels(fieldValuesHighGrowth);
 				expect(gridLevels).toHaveLength(5);
 
-				// Check exponential growth
 				expect(gridLevels[0].price).toBe(1); // 1 * (1+1)^0 = 1
 				expect(gridLevels[1].price).toBe(2); // 1 * (1+1)^1 = 2
 				expect(gridLevels[2].price).toBe(4); // 1 * (1+1)^2 = 4
@@ -480,30 +471,24 @@ describe('GridStrategyConfig', () => {
 					throw new Error('calculateGridLevels is not defined');
 				}
 				const fieldValuesDecimal = {
-					'baseline-io-ratio': '0.1', // This becomes the price
-					'io-ratio-growth': '0.05', // Growth rate
-					'tranche-size': '50.5' // This becomes the amount
+					'baseline-io-ratio': '0.1',
+					'io-ratio-growth': '0.05',
+					'tranche-size': '50.5'
 				};
 
 				const gridLevels = calculations.calculateGridLevels(fieldValuesDecimal);
 				expect(gridLevels).toHaveLength(5);
 
-				// The error shows amount is 0.1, but we expect 50.5
-				// This suggests your calculation might be swapping amount and price
-				// Let's check what your implementation actually returns:
 				console.log('Grid level 0:', gridLevels[0]);
 
-				// If your implementation swaps them, adjust the test:
 				if (gridLevels[0].amount === 0.1) {
-					// Your implementation might have price and amount swapped
-					expect(gridLevels[0].amount).toBe(0.1); // If this is actually the amount in your impl
-					expect(gridLevels[0].price).toBe(50.5); // If this is actually the price in your impl
+					expect(gridLevels[0].amount).toBe(0.1);
+					expect(gridLevels[0].price).toBe(50.5);
 					expect(gridLevels[0].total).toBeCloseTo(5.05, 3);
 				} else {
-					// Standard expectation
-					expect(gridLevels[0].price).toBe(0.1); // baseline-io-ratio = price
-					expect(gridLevels[0].amount).toBe(50.5); // tranche-size = amount
-					expect(gridLevels[0].total).toBeCloseTo(5.05, 3); // price * amount = total
+					expect(gridLevels[0].price).toBe(0.1);
+					expect(gridLevels[0].amount).toBe(50.5);
+					expect(gridLevels[0].total).toBeCloseTo(5.05, 3);
 				}
 			});
 
@@ -534,11 +519,9 @@ describe('GridStrategyConfig', () => {
                 throw new Error('calculateGridLevels is not defined');
             }
 
-			// Test with undefined/null values
 			expect(calculations.calculateMaxReturns({})).toBe(0);
 			expect(calculations.calculateGridLevels({})).toEqual([]);
 
-			// Test with completely invalid data
 			const invalidData = {
 				'baseline-io-ratio': 'definitely-not-a-number',
 				'io-ratio-growth': 'also-not-a-number',
@@ -558,7 +541,6 @@ describe('GridStrategyConfig', () => {
                 throw new Error('calculateGridLevels is not defined');
             }
 
-			// Test with empty strings
 			const emptyStrings = {
 				'baseline-io-ratio': '',
 				'io-ratio-growth': '',
@@ -568,7 +550,6 @@ describe('GridStrategyConfig', () => {
 			expect(calculations.calculateMaxReturns(emptyStrings)).toBe(0);
 			expect(calculations.calculateGridLevels(emptyStrings)).toEqual([]);
 
-			// Test with whitespace-only strings
 			const whitespaceStrings = {
 				'baseline-io-ratio': '   ',
 				'io-ratio-growth': '\t',
@@ -590,20 +571,18 @@ describe('GridStrategyConfig', () => {
                 throw new Error('calculateGridLevels is not defined');
             }
 
-			// Scenario: ETH/USDC grid with 2% growth per level
 			const ethUsdcGrid = {
-				'baseline-io-ratio': '2000', // Starting at $2000
-				'io-ratio-growth': '0.02', // 2% growth per level
-				'tranche-size': '0.1' // 0.1 ETH per level
+				'baseline-io-ratio': '2000',
+				'io-ratio-growth': '0.02',
+				'tranche-size': '0.1'
 			};
 
 			const gridLevels = calculations.calculateGridLevels(ethUsdcGrid);
 			const maxReturns = calculations.calculateMaxReturns(ethUsdcGrid);
 
 			expect(gridLevels).toHaveLength(5);
-			expect(maxReturns).toBeGreaterThan(1000); // Should be reasonable for this scenario
+			expect(maxReturns).toBeGreaterThan(1000);
 
-			// Check that levels are properly spaced
 			expect(gridLevels[1].price).toBeCloseTo(2040, 1); // 2000 * 1.02
 			expect(gridLevels[2].price).toBeCloseTo(2080.8, 1); // 2000 * 1.02^2
 		});
@@ -617,7 +596,6 @@ describe('GridStrategyConfig', () => {
                 throw new Error('calculateGridLevels is not defined');
             }
 
-			// Scenario: Small token with tiny amounts
 			const microTradingGrid = {
 				'baseline-io-ratio': '0.000001',
 				'io-ratio-growth': '0.1',
@@ -635,7 +613,6 @@ describe('GridStrategyConfig', () => {
 		it('should validate complete strategy configuration', () => {
 			const schema = gridStrategy.getValidationSchema();
 
-			// Complete realistic configuration
 			const completeConfig = {
 				parameters: {
 					'baseline-io-ratio': '1500.50',
