@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { dev } from '$app/environment';
 import { PUBLIC_DEBUG_MODE } from '$env/static/public';
 

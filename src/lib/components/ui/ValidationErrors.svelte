@@ -7,14 +7,16 @@
 	export let showGlobalErrors: boolean = false;
 
 	$: validation = $validationStore;
-	$: fieldErrors = fieldName ? getFieldErrors(validation.errors[fieldName]) : [];
+	$: fieldErrors = fieldName
+		? getFieldErrors(validation.errors[fieldName] as unknown as Record<string, string[]>)
+		: [];
 	$: globalErrors = showGlobalErrors
 		? Object.entries(validation.errors)
 				.filter(([key]) => !fieldName || key !== fieldName)
-				.flatMap(([, errors]) => getFieldErrors(errors))
+				.flatMap(([, errors]) => getFieldErrors(errors as unknown as Record<string, string[]>))
 		: [];
 
-	function getFieldErrors(errors: any): string[] {
+	function getFieldErrors(errors: Record<string, string[]>): string[] {
 		if (!errors) return [];
 
 		if (Array.isArray(errors)) {
@@ -32,7 +34,7 @@
 		}
 
 		if (typeof errors === 'object' && errors.message) {
-			return [errors.message];
+			return [errors.message as unknown as string];
 		}
 
 		debugLog.warn('Unknown error format:', errors);
@@ -42,7 +44,7 @@
 
 {#if fieldName && fieldErrors.length > 0}
 	<div class="field-errors mt-1" data-testid="field-errors-{fieldName}">
-		{#each fieldErrors as error}
+		{#each fieldErrors as error (error)}
 			<p class="flex items-center gap-1 text-sm text-red-600">
 				<Icon name="error" size="sm" classNames="flex-shrink-0" />
 				{error}
@@ -58,7 +60,7 @@
 	>
 		<h3 class="mb-2 text-sm font-semibold text-red-800">Please fix the following errors:</h3>
 		<ul class="space-y-1">
-			{#each globalErrors as error}
+			{#each globalErrors as error (error)}
 				<li class="flex items-start gap-2 text-sm text-red-600">
 					<Icon name="error" size="sm" classNames="flex-shrink-0 mt-0.5" />
 					{error}

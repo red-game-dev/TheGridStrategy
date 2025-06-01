@@ -60,7 +60,7 @@
 	$: formCanSubmit = $canSubmit;
 	$: hasValues = $hasRequiredValues;
 
-	const { reset, errors, setFields, validate } = createForm({
+	const { reset, setFields, validate } = createForm({
 		extend: validator({
 			schema: (validationSchema || currentStrategy?.getValidationSchema()) as ZodSchema
 		}),
@@ -112,7 +112,7 @@
 				debugLog.log('Validation errors:', formattedErrors);
 				validationStore.setValidation(false, formattedErrors);
 			}
-		} catch (error) {
+		} catch (error: unknown) {
 			debugLog.error('Validation error:', error);
 			validationStore.setValidation(false, {
 				general: ['Validation failed. Please check your inputs.']
@@ -147,7 +147,7 @@
 			strategyStore.setDeployments(deployments);
 
 			await initializeGui(strategy.selectedDeployment);
-		} catch (error) {
+		} catch (error: unknown) {
 			debugLog.error('App initialization failed:', error);
 			initializationError =
 				error instanceof Error ? error.message : 'Failed to initialize application';
@@ -170,17 +170,11 @@
 			guiStore.setLoading(true);
 
 			await initializeGui(strategy.selectedDeployment);
-		} catch (error) {
+		} catch (error: unknown) {
 			debugLog.error('Failed to reset GUI state:', error);
-			guiStore.setError('Failed to reset. Please refresh the page.');
 		} finally {
 			guiStore.setLoading(false);
 		}
-	}
-
-	function triggerFormValidation() {
-		debugLog.log('Manually triggering validation');
-		validate();
 	}
 
 	function resetFormAndStrategy() {
@@ -204,7 +198,7 @@
 				gridStrategyContent,
 				deploymentKey,
 				null,
-				(state: any) => {
+				(state: string) => {
 					debugLog.log('GUI state update:', state);
 				}
 			);
@@ -216,7 +210,7 @@
 			guiStore.setGui(gui);
 
 			await loadGuiConfiguration(gui);
-		} catch (error) {
+		} catch (error: unknown) {
 			debugLog.error('GUI initialization failed:', error);
 			guiStore.setError(error instanceof Error ? error.message : 'GUI initialization failed');
 		} finally {
@@ -310,7 +304,7 @@
 			if (allSelected) {
 				await loadFullGuiConfiguration(gui);
 			}
-		} catch (error) {
+		} catch (error: unknown) {
 			debugLog.error('Error checking tokens selected:', error);
 			guiStore.setError(error instanceof Error ? error.message : 'Token validation failed');
 		}
@@ -348,7 +342,7 @@
 			await checkAllTokensSelected(gui.gui);
 
 			debugLog.log('Token change completed successfully');
-		} catch (error) {
+		} catch (error: unknown) {
 			debugLog.error('Token selection failed:', error);
 
 			let errorMessage = 'Token selection failed';
@@ -399,7 +393,7 @@
 			setTimeout(() => validate(), 100);
 
 			debugLog.log('Field change completed successfully');
-		} catch (error) {
+		} catch (error: unknown) {
 			debugLog.error('Field update failed:', error);
 			validationStore.addFieldError(`parameters.${binding}`, 'Failed to update field');
 		}
@@ -438,7 +432,7 @@
 			setTimeout(() => validate(), 100);
 
 			debugLog.log('Deposit change completed successfully');
-		} catch (error) {
+		} catch (error: unknown) {
 			debugLog.error('Deposit update failed:', error);
 
 			const fieldPath = `deposits.${tokenKey}`;
@@ -483,7 +477,7 @@
 			setTimeout(() => validate(), 100);
 
 			debugLog.log('Token I/O change completed successfully');
-		} catch (error) {
+		} catch (error: unknown) {
 			debugLog.error('Token I/O update failed:', error);
 
 			const isInput = label === 'Input';
@@ -535,7 +529,7 @@
 			deploymentStore.setSuccess(transactionHash, explorerUrl);
 
 			resetFormAndStrategy();
-		} catch (error) {
+		} catch (error: unknown) {
 			debugLog.error('Deployment failed:', error);
 			deploymentStore.setError(error instanceof Error ? error.message : 'Deployment failed');
 		}
@@ -647,7 +641,7 @@
 					<section class="rounded-lg bg-white p-6 shadow-md">
 						<h2 class="mb-4 text-xl font-semibold text-gray-800">Advanced Parameters</h2>
 						<div class="space-y-6">
-							{#each gui.fieldDefinitionsWithDefaults as field}
+							{#each gui.fieldDefinitionsWithDefaults as field (field.binding)}
 								<DynamicFieldInput
 									fieldDefinition={field}
 									gui={gui.gui}
@@ -676,7 +670,7 @@
 										Output Vaults ({gui.tokenOutputs.length})
 									</h3>
 									<div class="space-y-4 border-l-2 border-red-100 pl-4">
-										{#each gui.tokenOutputs as output, index}
+										{#each gui.tokenOutputs as output, index (output.vaultId || index)}
 											<TokenIOInput
 												{index}
 												label="Output"
@@ -698,7 +692,7 @@
 										Input Vaults ({gui.tokenInputs.length})
 									</h3>
 									<div class="space-y-4 border-l-2 border-green-100 pl-4">
-										{#each gui.tokenInputs as input, index}
+										{#each gui.tokenInputs as input, index (input.vaultId || index)}
 											<TokenIOInput
 												{index}
 												label="Input"
@@ -735,7 +729,7 @@
 				{#if gui.deposits.length > 0}
 					<section class="rounded-lg bg-white p-6 shadow-md">
 						<div class="space-y-4">
-							{#each gui.deposits as deposit, index}
+							{#each gui.deposits as deposit, index (deposit.token || index)}
 								<DepositInput
 									{deposit}
 									{index}

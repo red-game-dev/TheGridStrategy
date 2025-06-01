@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { GuiFieldDefinitionCfg, DotrainOrderGui, FieldMetadata } from '$lib/types';
+	import type { GuiFieldDefinitionCfg, DotrainOrderGui } from '$lib/types';
 	import { strategyRegistry } from '$lib/strategies';
 	import { DynamicSchemaBuilder } from '$lib/validations/DynamicSchemaBuilder';
 	import ValidationErrors from '$lib/components/ui/ValidationErrors.svelte';
@@ -192,7 +192,7 @@
 					data-testid={`preset-${fieldDefinition.binding}`}
 				>
 					<option value="">Choose preset...</option>
-					{#each fieldDefinition.presets as preset}
+					{#each fieldDefinition.presets as preset (preset.value)}
 						<option value={preset.value}>{preset.name}</option>
 					{/each}
 				</select>

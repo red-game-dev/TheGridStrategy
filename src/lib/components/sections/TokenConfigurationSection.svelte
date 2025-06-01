@@ -19,7 +19,7 @@
 	<section class="rounded-lg bg-white p-6 shadow-md" data-testid="token-configuration">
 		<h2 class="mb-4 text-xl font-semibold text-gray-800">Token Configuration</h2>
 		<div class="space-y-4">
-			{#each selectTokens as token}
+			{#each selectTokens as token (token.key)}
 				<TokenSelector {token} {gui} on:change={handleTokenChange} />
 			{/each}
 		</div>

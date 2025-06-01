@@ -584,14 +584,13 @@
 							</tr>
 						</thead>
 						<tbody class="divide-y divide-gray-200 bg-white">
-							{#each gridLevels as level, index}
+							{#each gridLevels as level, index (level.price)}
 								{@const prevPrice = index > 0 ? gridLevels[index - 1].price : level.price}
 								{@const priceGap = index > 0 ? ((prevPrice - level.price) / level.price) * 100 : 0}
 								<tr class="transition-colors hover:bg-gray-50">
 									<td class="px-6 py-4 whitespace-nowrap">
 										<div class="flex items-center">
 											<div class="mr-3 h-2 w-2 rounded-full bg-blue-500"></div>
-											<!-- FIXED: Show positive level numbers -->
 											<span class="font-mono text-sm font-medium text-gray-900">
 												Level {Math.abs(level.level)}
 											</span>

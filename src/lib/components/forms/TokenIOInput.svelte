@@ -212,7 +212,7 @@
 	<!-- Error messages -->
 	{#if hasError && errorMessages.length > 0}
 		<div class="space-y-1">
-			{#each errorMessages as error}
+			{#each errorMessages as error, i (i)}
 				<p class="text-xs text-red-600">{error}</p>
 			{/each}
 		</div>

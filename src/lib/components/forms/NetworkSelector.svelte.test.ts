@@ -1,6 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/svelte';
+import { render, screen } from '@testing-library/svelte';
 import { beforeEach, describe, it, expect, vi } from 'vitest';
-import { tick } from 'svelte';
 import NetworkSelector from './NetworkSelector.svelte';
 import { cleanupMocks } from '$lib/utils/tests/utilities';
 import { getNetworkName } from '$lib/utils/helpers';

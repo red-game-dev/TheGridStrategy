@@ -116,7 +116,7 @@ function displayCombinedReport(data) {
 	});
 }
 
-function displayWorkspaceReport(data, name) {
+function displayWorkspaceReport(data) {
 	// Try to extract stats from different Vitest formats
 	let stats = extractStatsFromVitest(data);
 
@@ -219,7 +219,7 @@ function viewTextReports() {
 					if (content.split('\n').length > 10) {
 						console.log('   ...');
 					}
-				} catch (error) {
+				} catch {
 					console.log('   (Preview not available)');
 				}
 			}

@@ -16,7 +16,7 @@
 </script>
 
 <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-	{#each deployments as { key, value: deployment }}
+	{#each deployments as { key, value: deployment } (key)}
 		<button
 			on:click={() => handleSelection(key)}
 			class="rounded-lg border-2 p-4 text-left transition-colors {selected === key

@@ -96,7 +96,7 @@
 
 	<!-- Parameter fields -->
 	<div class="space-y-6">
-		{#each fieldDefinitions as field}
+		{#each fieldDefinitions as field (field.binding)}
 			<DynamicFieldInput fieldDefinition={field} {gui} on:change={handleFieldChange} />
 		{/each}
 	</div>

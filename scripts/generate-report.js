@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
 
 /**
  * Script to aggregate and format JSON test results from different workspaces
@@ -213,7 +212,7 @@ function generateTextSummary(reportData) {
 	];
 
 	// Add workspace details
-	Object.entries(reportData.workspaces).forEach(([key, workspace]) => {
+	Object.entries(reportData.workspaces).forEach(([, workspace]) => {
 		summaryLines.push(`### ${workspace.name}`);
 		summaryLines.push(
 			`- Tests: ${workspace.total} (${workspace.passed} passed, ${workspace.failed} failed)`
