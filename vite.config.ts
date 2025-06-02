@@ -45,13 +45,6 @@ export default defineConfig({
 				if (id.includes('node:')) return true;
 				return false;
 			},
-			output: {
-				manualChunks: {
-					// Separate bc libraries for better caching
-					blockchain: ['@reown/appkit', '@reown/appkit-adapter-wagmi', 'viem', 'wagmi', 'ethers'],
-					charts: ['chart.js', 'chartjs-adapter-date-fns', 'date-fns']
-				}
-			}
 		}
 	},
 
