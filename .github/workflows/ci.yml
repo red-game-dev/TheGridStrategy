@@ -157,6 +157,9 @@ jobs:
   accessibility:
     runs-on: ubuntu-latest
     needs: build
+    env:
+      PUBLIC_DEBUG_MODE: 'false'
+      PUBLIC_REOWN_PROJECT_ID: 'b56e18d47c72ab683b10814fe9495694' # Example project ID which works on localhost by Reown
 
     steps:
       - name: Checkout code
@@ -186,6 +189,9 @@ jobs:
   performance:
     runs-on: ubuntu-latest
     needs: build
+    env:
+      PUBLIC_DEBUG_MODE: 'false'
+      PUBLIC_REOWN_PROJECT_ID: 'b56e18d47c72ab683b10814fe9495694' # Example project ID which works on localhost by Reown
 
     steps:
       - name: Checkout code
