@@ -49,7 +49,6 @@ export default defineConfig({
 				manualChunks: {
 					// Separate bc libraries for better caching
 					blockchain: [
-						'@rainlanguage/orderbook',
 						'@reown/appkit',
 						'@reown/appkit-adapter-wagmi',
 						'viem',
