@@ -25,7 +25,7 @@
 		"test:component": "npm run test:client",
 		"test:unit": "npm run test:server",
 		"test:all": "vitest run --reporter=json --coverage > ./test-results/vitest-results.json",
-		"test:ci": "mkdir scripts test-results coverage playwright-report && vitest run --coverage --reporter=junit --reporter=json",
+		"test:ci": "mkdir test-results coverage playwright-report && vitest run --coverage --reporter=junit --reporter=json",
 		"test:report": "npm run clean-reports && mkdir -p test-results && npm run test:all && npm run generate-report",
 		"test:report-open": "npm run test:report && npm run open-reports",
 		"test:report-workspace": "npm run clean-reports && mkdir -p test-results && npm run test:client && npm run test:server && npm run test:integration && npm run generate-report",
