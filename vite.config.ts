@@ -44,7 +44,7 @@ export default defineConfig({
 				// Handle node-specific modules
 				if (id.includes('node:')) return true;
 				return false;
-			},
+			}
 		}
 	},
 
