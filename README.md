@@ -13,22 +13,26 @@ A sophisticated web application for configuring and deploying Grid trading strat
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <your-repo-url>
    cd TheGridStrategy
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Configure environment variables**
+
    ```bash
    cp .env.example .env
    ```
-   
+
    Update `.env` with your configuration:
+
    ```env
    # WalletConnect Project ID from https://cloud.reown.com
    PUBLIC_REOWN_PROJECT_ID=your_project_id_here
@@ -36,6 +40,7 @@ A sophisticated web application for configuring and deploying Grid trading strat
    ```
 
 4. **Start development server**
+
    ```bash
    npm run dev
    ```
@@ -45,6 +50,7 @@ A sophisticated web application for configuring and deploying Grid trading strat
 ## 🎯 How to Use the Application
 
 ### 1. Connect Your Wallet
+
 - Click "Connect Wallet" in the top right corner
 - Choose your preferred wallet provider
 - Confirm the connection in your wallet
@@ -52,20 +58,23 @@ A sophisticated web application for configuring and deploying Grid trading strat
 ### 2. Configure Your Grid Strategy
 
 #### Token Selection
+
 - **Token to Buy**: Select the token you want to purchase (input token)
 - **Token to Sell**: Select the token you want to sell (output token)
 
 #### Strategy Parameters
+
 - **Baseline Price**: The starting price ratio (how much input token per output token)
 - **Price Growth per Tranche**: The percentage increase between each grid level
 - **Tranche Size**: The amount of output token allocated to each grid level
-**Optional Fields**
+  **Optional Fields**
 - **Deposit Amount**: Total amount of output token to deposit
 - **Vault Id 1**: The vault id for Vault 1
 - **Vault Id 2**: The vault id for Vault 2
 - **Recharge Time**: Time for grid levels to automatically refill
 
 #### Example Configuration
+
 ```
 Token to Buy: USDC
 Token to Sell: ETH
@@ -78,17 +87,20 @@ Vault Id 2: 321
 ```
 
 ### 3. Review Strategy Visualization
+
 - View your grid levels in the interactive chart
 - See potential returns if all levels execute
 - Verify the price points and amounts
 
 ### 4. Deploy Your Strategy
+
 - Click "Deploy Strategy"
 - Review the transaction details
 - Confirm in your wallet
 - Wait for blockchain confirmation
 
 ### 5. Monitor Your Strategy
+
 - View deployment status and transaction hash
 - Access block explorer for detailed transaction info
 - Monitor strategy performance (future feature)
@@ -98,12 +110,14 @@ Vault Id 2: 321
 ### Available Scripts
 
 #### Core Development
+
 - `npm run dev` - Start development server with hot reload
 - `npm run build` - Build production bundle
 - `npm run preview` - Preview production build locally
 - `npm run prepare` - Sync SvelteKit configuration
 
 #### Code Quality
+
 - `npm run check` - Run TypeScript and Svelte checks
 - `npm run check:watch` - Run checks in watch mode
 - `npm run format` - Format code with Prettier
@@ -112,12 +126,14 @@ Vault Id 2: 321
 #### Testing Suite
 
 ##### Quick Testing
+
 - `npm run test` - Run all tests (unit + e2e)
 - `npm run test:run` - Run tests once without watch mode
 - `npm run test:watch` - Run tests in watch mode
 - `npm run test:ui` - Open Vitest UI for interactive testing
 
 ##### Comprehensive Testing
+
 - `npm run test:coverage` - Run tests with coverage report
 - `npm run test:e2e` - Run end-to-end tests with Playwright
 - `npm run test:component` - Run component tests only
@@ -125,17 +141,20 @@ Vault Id 2: 321
 - `npm run test:integration` - Run integration tests only
 
 ##### CI/CD Testing
+
 - `npm run test:ci` - Run all tests for CI environment
 - `npm run test:all` - Generate comprehensive test reports
 - `npm run test:report` - Generate and view test reports
 - `npm run test:report-open` - Generate reports and open in browser
 
 ##### Test Management
+
 - `npm run clean-reports` - Clean up test result files
 - `npm run generate-report` - Generate consolidated test report
 - `npm run open-reports` - Open test reports in browser
 
 #### Storybook
+
 - `npm run storybook` - Start Storybook development server
 - `npm run build-storybook` - Build Storybook for deployment
 
@@ -187,11 +206,13 @@ PUBLIC_DEBUG_MODE=true
 ### Test Categories
 
 1. **Unit Tests** (`test:unit`)
+
    - Individual function testing
    - Utility function validation
    - Calculation logic verification
 
 2. **Component Tests** (`test:component`)
+
    - Component rendering
    - User interaction testing
    - Props and state management
@@ -243,16 +264,19 @@ npm run preview  # Test production build locally
 ### Common Issues
 
 **Wallet Connection Failed**
+
 - Verify `PUBLIC_REOWN_PROJECT_ID` is correctly set
 - Check if your wallet supports WalletConnect v2
 - Try refreshing the page and reconnecting
 
 **Build Errors**
+
 - Run `npm run check` to identify TypeScript issues
 - Ensure all dependencies are installed: `npm install`
 - Clear node_modules and reinstall if needed
 
 **Test Failures**
+
 - Run tests individually to isolate issues
 - Check test coverage: `npm run test:coverage`
 - Update snapshots if UI changes: `npm run test:update-snapshots`
@@ -289,10 +313,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 🆘 Support
 
 For questions and support:
+
 - Open an issue on GitHub
 - Check existing documentation
 - Review test examples for usage patterns
 
 ---
 
-*Built with ❤️ using SvelteKit, Tailwind CSS, and the Raindex SDK*
+_Built with ❤️ using SvelteKit, Tailwind CSS, and the Raindex SDK_
