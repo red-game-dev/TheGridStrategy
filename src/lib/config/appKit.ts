@@ -8,7 +8,7 @@ import { mainnet } from '@reown/appkit/networks';
 const metadata = {
 	name: 'Grid Strategy',
 	description: 'Automated grid trading strategy on multiple blockchains',
-	url: 'https://reown.com/appkit', // origin must match your domain & subdomain
+	url: 'https://the-grid-strategy-5lanl7ldc-redeemer-paces-projects.vercel.app', // origin must match your domain & subdomain
 	icons: ['https://assets.reown.com/reown-profile-pic.png']
 };
 
