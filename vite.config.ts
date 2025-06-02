@@ -48,13 +48,7 @@ export default defineConfig({
 			output: {
 				manualChunks: {
 					// Separate bc libraries for better caching
-					blockchain: [
-						'@reown/appkit',
-						'@reown/appkit-adapter-wagmi',
-						'viem',
-						'wagmi',
-						'ethers'
-					],
+					blockchain: ['@reown/appkit', '@reown/appkit-adapter-wagmi', 'viem', 'wagmi', 'ethers'],
 					charts: ['chart.js', 'chartjs-adapter-date-fns', 'date-fns']
 				}
 			}
