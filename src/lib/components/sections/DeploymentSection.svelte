@@ -34,7 +34,7 @@
 		try {
 			// Generate the Rainlang code using the GUI
 			const rainlangResult = gui.getComposedRainlang();
-			
+
 			if (rainlangResult.error) {
 				console.error('Failed to generate Rainlang:', rainlangResult.error);
 				return;
@@ -51,13 +51,13 @@
 <section class="rounded-lg bg-white p-6 shadow-md">
 	<div class="mb-4 flex items-center justify-between">
 		<h2 class="text-xl font-semibold text-gray-800">Deploy Strategy</h2>
-		
+
 		<!-- Show Rainlang button -->
 		{#if strategy.allTokensSelected && gui}
 			<button
 				type="button"
 				on:click={handleShowRainlang}
-				class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400"
+				class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-400 hover:bg-gray-50"
 				title="View the generated Rainlang code for this strategy"
 			>
 				<Icon name="code" size="sm" />
