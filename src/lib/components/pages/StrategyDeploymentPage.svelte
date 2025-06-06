@@ -491,6 +491,14 @@
 	}
 
 	/**
+	 * Handle showing Rainlang modal
+	 */
+	function handleShowRainlang(event: CustomEvent<string>) {
+		rainlangCode = event.detail;
+		showRainlangModal = true;
+	}
+
+	/**
 	 * Handle form submission (deployment)
 	 */
 	async function handleFormSubmit() {
@@ -754,7 +762,9 @@
 			<DeploymentSection
 				canSubmit={formCanSubmit}
 				hasRequiredValues={hasValues}
+				gui={gui.gui}
 				on:deploy={handleFormSubmit}
+				on:showRainlang={handleShowRainlang}
 			/>
 		{/if}
 	</main>

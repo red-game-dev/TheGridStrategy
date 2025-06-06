@@ -9,9 +9,11 @@
 
 	export let canSubmit: boolean;
 	export let hasRequiredValues: boolean;
+	export let gui: any = null;
 
 	const dispatch = createEventDispatcher<{
 		deploy: void;
+		showRainlang: string;
 	}>();
 
 	$: wallet = $walletStore;
@@ -22,9 +24,48 @@
 	function handleDeploy() {
 		dispatch('deploy');
 	}
+
+	async function handleShowRainlang() {
+		if (!gui) {
+			console.warn('GUI not available for Rainlang generation');
+			return;
+		}
+
+		try {
+			// Generate the Rainlang code using the GUI
+			const rainlangResult = gui.getComposedRainlang();
+			
+			if (rainlangResult.error) {
+				console.error('Failed to generate Rainlang:', rainlangResult.error);
+				return;
+			}
+
+			const rainlangCode = rainlangResult.value || 'No Rainlang code available';
+			dispatch('showRainlang', rainlangCode);
+		} catch (error) {
+			console.error('Error generating Rainlang:', error);
+		}
+	}
 </script>
 
-<section class="rounded-lg p-6 shadow-md">
+<section class="rounded-lg bg-white p-6 shadow-md">
+	<div class="mb-4 flex items-center justify-between">
+		<h2 class="text-xl font-semibold text-gray-800">Deploy Strategy</h2>
+		
+		<!-- Show Rainlang button -->
+		{#if strategy.allTokensSelected && gui}
+			<button
+				type="button"
+				on:click={handleShowRainlang}
+				class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400"
+				title="View the generated Rainlang code for this strategy"
+			>
+				<Icon name="code" size="sm" />
+				Show Rainlang
+			</button>
+		{/if}
+	</div>
+
 	<!-- Success message (persistent) -->
 	{#if deployment.currentStep === 'success' && deployment.explorerUrl}
 		<div class="mb-6 rounded-lg border border-green-200 bg-green-50 p-4">

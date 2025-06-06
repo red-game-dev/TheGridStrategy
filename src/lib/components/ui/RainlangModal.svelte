@@ -17,7 +17,7 @@
 </script>
 
 <div
-	class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4"
+	class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
 	on:click={handleBackdropClick}
 	on:keydown={(e) => e.key === 'Escape' && handleClose()}
 	role="dialog"
